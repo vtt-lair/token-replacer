@@ -1,0 +1,24 @@
+{
+    "name": "token-replacer",
+    "title": "Token Replacer",
+    "description": "Automatically replace NPC actor tokens and/or portraits dependant on token assests saved in a defined folder structure.",
+    "version": "0.1.0",
+    "authors": [
+      {
+        "name": "Werner",
+        "url": "https://github.com/Werner-Dohse"
+      }
+    ],
+    "scripts": [
+        "/scripts/token-replacer.js"
+    ],    
+    "includes": [
+        "tokens",
+        "module.json"
+    ],
+    "url": "https://github.com/Werner-Dohse/token-replacer",
+    "manifest": "https://raw.githubusercontent.com/Werner-Dohse/token-replacer/master/module.json",
+    "download": "https://github.com/Werner-Dohse/token-replacer/raw/master/module.zip",
+    "minimumCoreVersion": "0.7.7",
+    "compatibleCoreVersion": "0.7.9"
+}
