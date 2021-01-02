@@ -1,4 +1,4 @@
-# token-replacer
+# Token Replacer
 Automatically replace NPC actor tokens and/or portraits dependent on token assets saved in a defined folder structure. Allows randomisation of token artwork, if more
 than one file per creature is added.
 
@@ -25,3 +25,9 @@ subfolder (dependent on creature difficulty level).
 Token file names need to start with the creature name and spaces in names need to be replaced by underscores ('_'). In order to randomise token artwork, more than one file can be supplied as long as the file name starts with the creature name eg 'Dire_Wolf_1.png', 'Dire_Wolf_2.png', 'Dire_Wolf_Black.png'. The randomisation only happens with token art and not portrait art.
 
 If no artwork is found for the creature, it will use the artwork already linked to that actor.
+
+![Token Replacer in Action](https://github.com/Werner-Dohse/token-replacer/blob/main/example/Token-Replacer.gif "Token Replacer in Action")
+
+## Known Issues
+* Manually creating actor from the 'Actors Directory', first time adding the actor to the scene will show the original token. 
+* After closing a newly manually created actor, even if you've put the actor in the scene. The token will again revert to original, until you've added a 2nd one.
