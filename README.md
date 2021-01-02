@@ -26,6 +26,8 @@ Token file names need to start with the creature name and spaces in names need t
 
 If no artwork is found for the creature, it will use the artwork already linked to that actor.
 
+![Token Replacer in Action](https://github.com/Werner-Dohse/token-replacer/blob/main/example/Token-Replacer.gif "Token Replacer in Action")
+
 ## Known Issues
 * Manually creating actor from the 'Actors Directory', first time adding the actor to the scene will show the original token. 
 * After closing a newly manually created actor, even if you've put the actor in the scene. The token will again revert to original, until you've added a 2nd one.
