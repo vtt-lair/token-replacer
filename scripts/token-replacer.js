@@ -51,11 +51,12 @@ function init() {
         default: difficultyVariableDefault,
     });
 
-    // setup hook for replacement before actor created
-    Hooks.on("preCreateActor", creationHook);
+    // setup hook for replacement before and during actor creation
+    Hooks.on("preCreateActor", preCreateActorHook);
+    Hooks.on("createActor", createActorHook);    
     
     // make sure we change the image each time we drag a token from the actors
-    Hooks.on("preCreateToken", creationHook);    
+    Hooks.on("preCreateToken", preCreateTokenHook);    
 
     // cache the tokens
     cacheAvailableTokens();    
@@ -84,28 +85,40 @@ async function cacheAvailableTokens() {
 	}
 }
 
-
-// replace the artwork for a NPC actor with the version from this module
-function creationHook(data, options, userId) {
-    // if the options has an actorId, this was called from preCreateToken
-    // and get the actor details to get the data
-    // otherwise it was called from preCreateActor and we already have 
-    // the correct data
-    if (options.actorId) {
-        const actor = game.actors.get(options.actorId);
-        data = actor.data;
-        hookedFromTokenCreation = true;
-    } else {
-        hookedFromTokenCreation = false;
-    };    
-
+// handle preCreateActor hook
+function preCreateActorHook(data, options, userId) {
     // grab the saved values
     grabSavedSettings();
+    hookedFromTokenCreation = false;
 
     if ( !replaceToken || (data.type !== "npc") || !hasProperty(data, difficultyVariable) ) return;
-    replaceArtWork(data);	   
+    replaceArtWork(data);
 }
 
+// handle createActor hook
+function createActorHook(data, options, userId) {
+    // grab the saved values
+    grabSavedSettings();
+    const passData = data.data;
+    hookedFromTokenCreation = false;
+
+    if ( !replaceToken || (passData.type !== "npc") || !hasProperty(passData, difficultyVariable) ) return;
+    replaceArtWork(passData);
+}
+
+// handle preCreateToken hook
+function preCreateTokenHook(data, options, userId) {
+    // grab the saved values
+    grabSavedSettings();
+    const actor = game.actors.get(options.actorId);
+    const passData = actor.data;
+    hookedFromTokenCreation = true;
+
+    if ( !replaceToken || (passData.type !== "npc") || !hasProperty(passData, difficultyVariable) ) return;
+    replaceArtWork(passData);
+}
+
+// replace the artwork for a NPC actor with the version from this module
 function replaceArtWork(data) {
     const cleanName = data.name.replace(/ /g, "_");
 	const diffDir = (difficultyName) ? `${String(getProperty(data, difficultyVariable)).replace(".", "_")}/` : "";
@@ -129,7 +142,9 @@ function replaceArtWork(data) {
         if (replaceToken === 1 || replaceToken === 3) {
             data.token.img = tokenSrc;
         }	
-    } 
+    }
+    
+    return data;
 }
 
 // Initialize module
