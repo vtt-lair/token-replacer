@@ -26,6 +26,8 @@ Token file names need to start with the creature name and spaces in names need t
 
 If no artwork is found for the creature, it will use the artwork already linked to that actor.
 
+> Tokens found in the module are free tokens supplied by **Forgotten Adventures**: [Patreon](https://www.patreon.com/forgottenadventures) [Website](https://www.forgotten-adventures.net/)
+
 ![Token Replacer in Action](https://github.com/Werner-Dohse/token-replacer/blob/main/example/Token-Replacer.gif "Token Replacer in Action")
 
 ## Known Issues
