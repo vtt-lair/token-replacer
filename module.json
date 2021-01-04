@@ -17,8 +17,8 @@
         "module.json"
     ],
     "url": "https://github.com/Werner-Dohse/token-replacer",
-    "manifest": "https://github.com/Werner-Dohse/token-replacer/blob/main/module.json",
-    "download": "https://github.com/Werner-Dohse/token-replacer/blob/main/module.zip",
+    "manifest": "https://raw.githubusercontent.com/Werner-Dohse/token-replacer/main/module.json",
+    "download": "https://github.com/Werner-Dohse/token-replacer/raw/main/module.zip",
     "minimumCoreVersion": "0.7.7",
     "compatibleCoreVersion": "0.7.9"
 }
