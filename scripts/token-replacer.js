@@ -8,7 +8,9 @@ let difficultyName;
 let difficultyVariable;
 let hookedFromTokenCreation = false;
 
-function init() {
+/** direct hooks **/
+// initialisation
+Hooks.on("init", () => {
     console.log("Token Replacer initialising...");
     
     // token replacement setting
@@ -51,17 +53,18 @@ function init() {
         default: difficultyVariableDefault,
     });
 
-    // setup hook for replacement before and during actor creation
-    Hooks.on("preCreateActor", preCreateActorHook);
-    Hooks.on("createActor", createActorHook);    
-    
-    // make sure we change the image each time we drag a token from the actors
-    Hooks.on("preCreateToken", preCreateTokenHook);    
+    // hook up events
+    hookupEvents();
+});
 
+// module ready
+Hooks.on("ready", () => {
     // cache the tokens
-    cacheAvailableTokens();    
-}
+    cacheAvailableTokens();
+});
 
+
+/** handle functions **/
 // grab the already saved settings
 function grabSavedSettings() {
     replaceToken = game.settings.get("token-replacer", "replaceToken") ?? 0;
@@ -83,6 +86,16 @@ async function cacheAvailableTokens() {
 		const tokens = await FilePicker.browse("data", folder);
 		tokens.files.forEach(t => cachedTokens.push(t));
 	}
+}
+
+// hook events hooked up
+function hookupEvents() {
+    // setup hook for replacement before and during actor creation
+    Hooks.on("preCreateActor", preCreateActorHook);
+    Hooks.on("createActor", createActorHook);    
+    
+    // make sure we change the image each time we drag a token from the actors
+    Hooks.on("preCreateToken", preCreateTokenHook);
 }
 
 // handle preCreateActor hook
@@ -120,9 +133,9 @@ function preCreateTokenHook(data, options, userId) {
 
 // replace the artwork for a NPC actor with the version from this module
 function replaceArtWork(data) {
-    const cleanName = data.name.replace(/ /g, "_");
+    const formattedName = data.name.replace(/ /g, "_");
 	const diffDir = (difficultyName) ? `${String(getProperty(data, difficultyVariable)).replace(".", "_")}/` : "";
-    const tokenCheck = `${tokenPath}${difficultyName}${diffDir}${cleanName}`;
+    const tokenCheck = `${tokenPath}${difficultyName}${diffDir}${formattedName}`;
     
     const filteredCachedTokens = cachedTokens.filter(t => t.indexOf(tokenCheck) >= 0);
     if (!filteredCachedTokens || (filteredCachedTokens && !filteredCachedTokens.length)) return;
@@ -146,6 +159,3 @@ function replaceArtWork(data) {
     
     return data;
 }
-
-// Initialize module
-Hooks.on("init", init);

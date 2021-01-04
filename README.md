@@ -31,5 +31,5 @@ If no artwork is found for the creature, it will use the artwork already linked 
 ![Token Replacer in Action](https://github.com/Werner-Dohse/token-replacer/blob/main/example/Token-Replacer.gif "Token Replacer in Action")
 
 ## Known Issues
-* Manually creating actor from the 'Actors Directory', first time adding the actor to the scene will show the original token. 
+* Manually creating actor from the 'Actors Directory', first time adding the actor to the scene will show the original token, 2nd one will start showing the replaced tokens. 
 * After closing a newly manually created actor, even if you've put the actor in the scene. The token will again revert to original, until you've added a 2nd one.
