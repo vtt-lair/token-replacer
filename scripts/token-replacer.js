@@ -106,6 +106,7 @@ function preCreateActorHook(data, options, userId) {
 
     if ( !replaceToken || (data.type !== "npc") || !hasProperty(data, difficultyVariable) ) return;
     replaceArtWork(data);
+    data.update(data);
 }
 
 // handle createActor hook
@@ -117,6 +118,7 @@ function createActorHook(data, options, userId) {
 
     if ( !replaceToken || (passData.type !== "npc") || !hasProperty(passData, difficultyVariable) ) return;
     replaceArtWork(passData);
+    data.update(passData);
 }
 
 // handle preCreateToken hook
@@ -129,6 +131,7 @@ function preCreateTokenHook(data, options, userId) {
 
     if ( !replaceToken || (passData.type !== "npc") || !hasProperty(passData, difficultyVariable) ) return;
     replaceArtWork(passData);
+    actor.update(passData);
 }
 
 // replace the artwork for a NPC actor with the version from this module
