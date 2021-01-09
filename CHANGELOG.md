@@ -1,6 +1,7 @@
 # v 0.2.1
 
 * Fix bug when trying to clear Difficulty Name
+
 # v 0.2.0
 
 * Change configuration settings to have a setting menu.
