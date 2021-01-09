@@ -1,3 +1,11 @@
+# v 0.2.0
+
+* Change configuration settings to have a setting menu.
+    * Add new token directory input, so that users can specify their own token directory outside of the module folder. This is advised.
+    * Add error handling for Token Directory, NPC Difficulty Name and NPC Difficulty Variable.
+* Add this changelog file.
+* Handle special characters in file names.
+
 # v 0.1.2
 
 * Make sure to update the token and actor data after changing the art work.
