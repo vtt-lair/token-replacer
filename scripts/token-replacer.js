@@ -319,7 +319,13 @@ function preCreateActorHook(data, options, userId) {
     grabSavedSettings();
     hookedFromTokenCreation = false;
 
-    if ( !replaceToken || (data.type !== "npc") || !hasProperty(data, difficultyVariable) ) return;
+    let hasDifficultProperty = hasProperty(data, difficultyVariable);
+    if (!difficultyVariable) {
+        // overwrite since it's empty
+        hasDifficultProperty = true;
+    }
+
+    if ( !replaceToken || (data.type !== "npc") || !hasDifficultProperty ) return;
     replaceArtWork(data);    
 }
 
@@ -330,7 +336,13 @@ function createActorHook(data, options, userId) {
     const passData = data.data;
     hookedFromTokenCreation = false;
 
-    if ( !replaceToken || (passData.type !== "npc") || !hasProperty(passData, difficultyVariable) ) return;
+    let hasDifficultProperty = hasProperty(passData, difficultyVariable);
+    if (!difficultyVariable) {
+        // overwrite since it's empty
+        hasDifficultProperty = true;
+    }
+
+    if ( !replaceToken || (passData.type !== "npc") || !hasDifficultProperty ) return;
     replaceArtWork(passData);
     data.update(passData);
 }
@@ -343,7 +355,13 @@ function preCreateTokenHook(data, options, userId) {
     const passData = actor.data;
     hookedFromTokenCreation = true;
 
-    if ( !replaceToken || (passData.type !== "npc") || !hasProperty(passData, difficultyVariable) ) return;
+    let hasDifficultProperty = hasProperty(passData, difficultyVariable);
+    if (!difficultyVariable) {
+        // overwrite since it's empty
+        hasDifficultProperty = true;
+    }
+
+    if ( !replaceToken || (passData.type !== "npc") || !hasDifficultProperty ) return;
     replaceArtWork(passData);
     actor.update(passData);
 }
