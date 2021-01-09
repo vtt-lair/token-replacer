@@ -31,6 +31,5 @@ If no artwork is found for the creature, it will use the artwork already linked 
 ![Token Replacer in Action](https://github.com/Werner-Dohse/token-replacer/blob/main/example/Token-Replacer.gif "Token Replacer in Action")
 
 ## Known Issues
-* New release removes any private tokens and replaces with what is in by default.
 * Manually creating actor from the 'Actors Directory', first time adding the actor to the scene will show the original token, 2nd one will start showing the replaced tokens. 
 
