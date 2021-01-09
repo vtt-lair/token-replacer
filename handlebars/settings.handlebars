@@ -1,0 +1,28 @@
+
+<h2>Token Replacer Configuration!</h2>
+
+<div class="form-description">
+  <form id="token-replacer-settings" autocomplete="off" onsubmit="event.preventDefault();">
+    <hr>
+    <h3>[Required] A location for your token images</h3>
+    <p>These can't be stored in your root data folder, create a place for them to live. Defaults to the free Forgotten Adventures tokens. It's however advised to change this directory to something NOT in the modules directory as new versions will overwrite any tokens you manually saved there.</p>
+    <div class="form-content" style="display: flex">
+      <input class="setup-config" type="text" data-dtype="Directory" name="token-directory" style="flex: 0 1 auto" ;
+        value="{{setupConfig.tokenDirectory}}" />
+    </div>
+    <hr>
+    <h3>NPC Difficulty Name</h3>
+    <p>The difficulty measurement name used in your system (defaults to 'cr' for DnD 5e). Token art should be put under folders named after this measurement and is case sensitive (the cr1 subfolder should have all cr1 tokens). Leaving this empty will mean you need to save the images in the root of the tokens path and not in subfolders and the 'NPC Difficulty Variable' is not checked to figure out subfolder structures.</p>
+      <input class="setup-config" type="text" name="difficulty-name" style="flex: 0 1 auto" ;
+        value="{{setupConfig.difficultyName}}" />
+    <hr>
+    <h3>NPC Difficulty Variable</h3>
+    <p>The difficulty measurement variable used in the actor's data (defaults to DnD 5e's). This is dependant on whether you entered an 'NPC Difficulty Name'. If you are unsure what the variable is, leave 'NPC Difficulty Name' empty and save everyting into the root folder.</p>
+      <input class="setup-config" type="text" name="difficulty-variable" style="flex: 0 1 auto" ;
+        value="{{setupConfig.difficultyVariable}}" />
+    <hr>
+    <div class="setup-feedback" id="setup-feedback" style="color: red"></div>
+    <button id="replacer-settings" class="settings-button" type="submit">Save</button>
+  </form>
+</div>
+
