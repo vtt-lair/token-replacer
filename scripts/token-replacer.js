@@ -61,7 +61,7 @@ class TokenReplacerSetup extends FormApplication {
 
         const tokenDir = formData['token-directory'];
         const diffName = formData['difficulty-name'];
-        const diffVariable = formData['difficulty-variable'];
+        let diffVariable = formData['difficulty-variable'];
 
         // if not difficulty name is specified then the variable is not needed
         if (diffName === "") {
