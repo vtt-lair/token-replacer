@@ -381,9 +381,9 @@ function replaceArtWork(data) {
 
         data.token = data.token || {};
         // if we should replace the portrait art and the call is not from PreCreateToken.
-        // we dont' run from PreCreateToken, otherwise the portrait art will change
-        // every time we put a token on the scene
-        if (replaceToken === 2 || replaceToken === 3 && !hookedFromTokenCreation) {
+        // we only change the art if the art is still the defaul mystery
+        // otherwise the portrait art will change every time we put a token on the scene
+        if (replaceToken === 2 || replaceToken === 3 && (!hookedFromTokenCreation || data.img === 'icons/svg/mystery-man.svg')) {
             data.img = tokenSrc;
         }
         // we should replace the token art
