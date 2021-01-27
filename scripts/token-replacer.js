@@ -368,8 +368,8 @@ function preCreateTokenHook(data, options, userId) {
 
 // replace the artwork for a NPC actor with the version from this module
 function replaceArtWork(data) {
-    const formattedName = escape(data.name.replace(/ /g, "_"));
-	const diffDir = (difficultyName) ? `${String(getProperty(data, difficultyVariable)).replace(".", "_")}/` : "";
+    const formattedName = escape(data.name.trim().replace(/ /g, "_"));
+    const diffDir = (difficultyName) ? `${String(getProperty(data, difficultyVariable)).replace(".", "_")}/` : "";
     const tokenCheck = `${tokenDirectory.current}/${difficultyName}${diffDir}${formattedName}`;
     
     const filteredCachedTokens = cachedTokens.filter(t => t.toLowerCase().indexOf(tokenCheck.toLowerCase()) >= 0);
