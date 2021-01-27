@@ -1,6 +1,7 @@
 const tokenPathDefault = "modules/token-replacer/tokens/";
 const difficultyNameDefault = "cr";
 const difficultyVariableDefault = "data.details.cr";
+const portraitPrefixDefault = "";
 const BAD_DIRS = ["[data]", "[data] ", "", null];
 
 let cachedTokens = [];
@@ -8,6 +9,7 @@ let replaceToken;
 let tokenDirectory;
 let difficultyName;
 let difficultyVariable;
+let portraitPrefix;
 let hookedFromTokenCreation = false;
 
 Hooks.on("renderTokenReplacerSetup", (app, html, user) => {
@@ -33,6 +35,7 @@ class TokenReplacerSetup extends FormApplication {
         const tokenDir = game.settings.get("token-replacer", "tokenDirectory");
         const diffName = game.settings.get("token-replacer", "difficultyName");
         const diffVariable = game.settings.get("token-replacer", "difficultyVariable");
+        const prefix = game.settings.get("token-replacer", "portraitPrefix");
         
         const dataDirSet = !BAD_DIRS.includes(tokenDir);
 
@@ -40,6 +43,7 @@ class TokenReplacerSetup extends FormApplication {
             "tokenDirectory": tokenDir,
             "difficultyName": diffName,
             "difficultyVariable": diffVariable,
+            "portraitPrefix": prefix,
         };
 
         let diffSpecified = true;
@@ -62,6 +66,7 @@ class TokenReplacerSetup extends FormApplication {
         const tokenDir = formData['token-directory'];
         const diffName = formData['difficulty-name'];
         let diffVariable = formData['difficulty-variable'];
+        const prefix = formData['portrait-prefix'];
 
         // if not difficulty name is specified then the variable is not needed
         if (diffName === "") {
@@ -71,6 +76,7 @@ class TokenReplacerSetup extends FormApplication {
         await game.settings.set("token-replacer", "tokenDirectory", tokenDir);
         await game.settings.set("token-replacer", "difficultyName", diffName);
         await game.settings.set("token-replacer", "difficultyVariable", diffVariable);
+        await game.settings.set("token-replacer", "portraitPrefix", prefix);
 
         const tokenDirSet = !BAD_DIRS.includes(tokenDir);
 
@@ -84,7 +90,7 @@ class TokenReplacerSetup extends FormApplication {
             throw new Error(`If there is a 'Difficulty Name', you NEED to specify the 'Difficulty Variable'.`);
         } else {
             // recache the tokens
-            cacheAvailableTokens();            
+            cacheAvailableFiles();            
         }
     }
 }
@@ -204,7 +210,7 @@ function init() {
 // module ready
 function ready() {
     // cache the tokens
-    cacheAvailableTokens();
+    cacheAvailableFiles();
 };
 
 function registerSettings() {
@@ -266,6 +272,15 @@ function registerSettings() {
         type: String,
         default: difficultyVariableDefault,
     });
+
+    game.settings.register("token-replacer", "portraitPrefix", {
+        name: "Portrait Prefix",
+        hint: "The prefix used to define images that should be used when replacing portraits, instead of a token image.",
+        scope: "world",
+        config: false,
+        type: String,
+        default: portraitPrefixDefault,
+    });
 }
 
 /** handle functions **/
@@ -282,10 +297,11 @@ function grabSavedSettings() {
     }    
     difficultyName = game.settings.get("token-replacer", "difficultyName");
     difficultyVariable = game.settings.get("token-replacer", "difficultyVariable");
+    portraitPrefix = game.settings.get("token-replacer", "portraitPrefix"); 
 }
 
 // cache the set of available tokens which can be used to replace artwork to avoid repeated filesystem requests
-async function cacheAvailableTokens() {
+async function cacheAvailableFiles() {
     // grab the saved values
     grabSavedSettings();
 
@@ -351,7 +367,7 @@ function createActorHook(data, options, userId) {
 function preCreateTokenHook(data, options, userId) {
     // grab the saved values
     grabSavedSettings();
-    const actor = game.actors.get(options.actorId);
+    const actor = game.actors.get(options.actorId);    
     const passData = actor.data;
     hookedFromTokenCreation = true;
 
@@ -363,7 +379,7 @@ function preCreateTokenHook(data, options, userId) {
 
     if ( !replaceToken || (passData.type !== "npc") || !hasDifficultProperty ) return;
     replaceArtWork(passData);
-    actor.update(passData);
+    actor.update(passData);    
 }
 
 // replace the artwork for a NPC actor with the version from this module
@@ -371,25 +387,45 @@ function replaceArtWork(data) {
     const formattedName = escape(data.name.replace(/ /g, "_"));
 	const diffDir = (difficultyName) ? `${String(getProperty(data, difficultyVariable)).replace(".", "_")}/` : "";
     const tokenCheck = `${tokenDirectory.current}/${difficultyName}${diffDir}${formattedName}`;
+    let portraitCheck;
+
+    if (portraitPrefix) {
+        portraitCheck = `${tokenDirectory.current}/${difficultyName}${diffDir}${portraitPrefix}${formattedName}`;
+    } else {
+        portraitCheck = tokenCheck;
+    }    
     
     const filteredCachedTokens = cachedTokens.filter(t => t.toLowerCase().indexOf(tokenCheck.toLowerCase()) >= 0);
-    if (!filteredCachedTokens || (filteredCachedTokens && !filteredCachedTokens.length)) return;
+    let filteredCachedPortraits = cachedTokens.filter(t => t.toLowerCase().indexOf(portraitCheck.toLowerCase()) >= 0);
+    filteredCachedPortraits = (filteredCachedPortraits) ?? filteredCachedTokens;
 
-    if (filteredCachedTokens && filteredCachedTokens.length) {
-        const randomIdx = Math.floor(Math.random() * (filteredCachedTokens.length - 1));
+    if (
+        !filteredCachedTokens || (filteredCachedTokens && !filteredCachedTokens.length) &&
+        !filteredCachedPortraits || (filteredCachedPortraits && !filteredCachedPortraits.length)
+    ) {
+        return
+    }
+
+    data.token = data.token || {};
+
+    // if we should replace the portrait art and the call is not from PreCreateToken.
+    // we only change the art if the art is still the default mystery man
+    // otherwise the portrait art will change every time we put a token on the scene
+    if (replaceToken === 2 || replaceToken === 3 && (!hookedFromTokenCreation || data.img === 'icons/svg/mystery-man.svg')) {
+        let randomIdx = Math.floor(Math.random() * (filteredCachedPortraits.length * filteredCachedPortraits.length));
+        randomIdx = Math.floor(randomIdx / filteredCachedPortraits.length);
+        const portraitSrc = filteredCachedPortraits[randomIdx];
+
+        data.img = portraitSrc;
+    }
+
+    // we should replace the token art
+    if (replaceToken === 1 || replaceToken === 3) {
+        let randomIdx = Math.floor(Math.random() * (filteredCachedTokens.length * filteredCachedTokens.length));
+        randomIdx = Math.floor(randomIdx / filteredCachedTokens.length);
         const tokenSrc = filteredCachedTokens[randomIdx];
 
-        data.token = data.token || {};
-        // if we should replace the portrait art and the call is not from PreCreateToken.
-        // we dont' run from PreCreateToken, otherwise the portrait art will change
-        // every time we put a token on the scene
-        if (replaceToken === 2 || replaceToken === 3 && !hookedFromTokenCreation) {
-            data.img = tokenSrc;
-        }
-        // we should replace the token art
-        if (replaceToken === 1 || replaceToken === 3) {
-            data.token.img = tokenSrc;
-        }	
+        data.token.img = tokenSrc;            
     }
     
     return data;
