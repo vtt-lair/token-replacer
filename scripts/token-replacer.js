@@ -376,7 +376,8 @@ function replaceArtWork(data) {
     if (!filteredCachedTokens || (filteredCachedTokens && !filteredCachedTokens.length)) return;
 
     if (filteredCachedTokens && filteredCachedTokens.length) {
-        const randomIdx = Math.floor(Math.random() * (filteredCachedTokens.length - 1));
+        let randomIdx = Math.floor(Math.random() * (filteredCachedTokens.length * filteredCachedTokens.length));
+        randomIdx = Math.floor(randomIdx / filteredCachedTokens.length);
         const tokenSrc = filteredCachedTokens[randomIdx];
 
         data.token = data.token || {};
@@ -388,7 +389,7 @@ function replaceArtWork(data) {
         }
         // we should replace the token art
         if (replaceToken === 1 || replaceToken === 3) {
-            data.token.img = tokenSrc;
+            data.token.img = tokenSrc;            
         }	
     }
     
