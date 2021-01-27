@@ -298,7 +298,7 @@ async function cacheAvailableTokens() {
     const folders = await FilePicker.browse(tokenDirectory.activeSource, tokenDirectory.current);
     // any files in subfolders
 	for ( let folder of folders.dirs ) {
-		const tokens = await FilePicker.browse("data", folder);
+		const tokens = await FilePicker.browse(tokenDirectory.activeSource, folder);
 		tokens.files.forEach(t => cachedTokens.push(t));
 	}
 }
