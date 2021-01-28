@@ -5,6 +5,7 @@
 * Fix the issue where, when adding an actor's token for the first time (especially newly created actors), it didn't update the token the first time. Only the second time and onwards.
 * Artificially increased the randomisation pool, to try and get better randomisation.
 * Added the Portrait Prefix setting, if you want to have a specific image as the portrait
+* Trimmed the image names when building the formatted name - kageru
 
 # v 0.2.1
 
