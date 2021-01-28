@@ -424,7 +424,6 @@ function replaceArtWork(data) {
         let randomIdx = Math.floor(Math.random() * (filteredCachedPortraits.length * filteredCachedPortraits.length));
         randomIdx = Math.floor(randomIdx / filteredCachedPortraits.length);
         const portraitSrc = filteredCachedPortraits[randomIdx];
-
         data.img = portraitSrc;
     }
 
