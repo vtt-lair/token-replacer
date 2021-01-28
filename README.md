@@ -15,6 +15,9 @@ subfolders.
 #### NPC Difficulty Variable
 The variable used by the game system you are using. It's used to see what difficulty level the creature is, in order to figure out in which subfolder the figure can be found. If 'NPC Difficulty Name' is empty, this won't be checked.
 
+#### Portrait Prefix
+The prefix used to define images that should be used when replacing portraits, instead of a token image. This is used if you want to specify a specific artwork that should be used for the portrait replacement. It uses the prefix exactly as you define it, i.e. if you use "prefix", the the file needs to be called "prefixDeep_Scion.png", if you use "p_" for instance, th file name has to be "p_Deep_Scion.png".
+
 ### Automatically replace NPC actor artwork
 This is where you enable or disable the token/portrait replacement. There are 4 options available
 * Disabled - do not do any token or portrait replacement
@@ -33,7 +36,3 @@ If no artwork is found for the creature, it will use the artwork already linked 
 > Tokens found in the module are free tokens supplied by **Forgotten Adventures**: [Patreon](https://www.patreon.com/forgottenadventures) [Website](https://www.forgotten-adventures.net/)
 
 ![Token Replacer in Action](https://github.com/Werner-Dohse/token-replacer/blob/main/example/Token-Replacer.gif "Token Replacer in Action")
-
-## Known Issues
-* Manually creating actor from the 'Actors Directory', first time adding the actor to the scene will show the original token, 2nd one will start showing the replaced tokens. 
-

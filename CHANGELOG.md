@@ -1,3 +1,11 @@
+# v 0.2.2
+
+* Fix bug where when using The Forge's Assest Library, it wasn't grabbing the images correctly.
+* If you opted in for portrait art replacement, and created a new actor. The portrait wasn't being updated for the actor.
+* Fix the issue where, when adding an actor's token for the first time (especially newly created actors), it didn't update the token the first time. Only the second time and onwards.
+* Artificially increased the randomisation pool, to try and get better randomisation.
+* Added the Portrait Prefix setting, if you want to have a specific image as the portrait
+
 # v 0.2.1
 
 * Fix bug when trying to clear Difficulty Name
