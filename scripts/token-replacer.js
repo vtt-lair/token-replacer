@@ -327,6 +327,7 @@ function hookupEvents() {
     
     // make sure we change the image each time we drag a token from the actors
     Hooks.on("preCreateToken", preCreateTokenHook);
+    Hooks.on("createToken", createTokenHook);
 }
 
 // handle preCreateActor hook
@@ -346,10 +347,10 @@ function preCreateActorHook(data, options, userId) {
 }
 
 // handle createActor hook
-function createActorHook(data, options, userId) {
+function createActorHook(scene, tokenData, flags, id) {
     // grab the saved values
     grabSavedSettings();
-    const passData = data.data;
+    const passData = scene.data;
     hookedFromTokenCreation = false;
 
     let hasDifficultProperty = hasProperty(passData, difficultyVariable);
@@ -364,10 +365,10 @@ function createActorHook(data, options, userId) {
 }
 
 // handle preCreateToken hook
-function preCreateTokenHook(data, options, userId) {
+function preCreateTokenHook(scene, tokenData, flags, id) {
     // grab the saved values
     grabSavedSettings();
-    const actor = game.actors.get(options.actorId);    
+    const actor = game.actors.get(tokenData.actorId);    
     const passData = actor.data;
     hookedFromTokenCreation = true;
 
@@ -380,6 +381,14 @@ function preCreateTokenHook(data, options, userId) {
     if ( !replaceToken || (passData.type !== "npc") || !hasDifficultProperty ) return;
     replaceArtWork(passData);
     actor.update(passData);    
+}
+
+async function createTokenHook(scene, tokenData, flags, id) {
+    const actor = game.actors.get(tokenData.actorId);
+    const token = new Token(tokenData);
+
+    token.scene = scene;
+    token.update({"img": actor.data.token.img});
 }
 
 // replace the artwork for a NPC actor with the version from this module
@@ -415,7 +424,6 @@ function replaceArtWork(data) {
         let randomIdx = Math.floor(Math.random() * (filteredCachedPortraits.length * filteredCachedPortraits.length));
         randomIdx = Math.floor(randomIdx / filteredCachedPortraits.length);
         const portraitSrc = filteredCachedPortraits[randomIdx];
-
         data.img = portraitSrc;
     }
 
