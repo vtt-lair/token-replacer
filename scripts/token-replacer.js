@@ -407,12 +407,8 @@ function replaceArtWork(data) {
     const filteredCachedTokens = cachedTokens.filter(t => t.toLowerCase().indexOf(tokenCheck.toLowerCase()) >= 0);
     let filteredCachedPortraits = cachedTokens.filter(t => t.toLowerCase().indexOf(portraitCheck.toLowerCase()) >= 0);
     filteredCachedPortraits = (filteredCachedPortraits) ?? filteredCachedTokens;
-
-    if (
-        !filteredCachedTokens || (filteredCachedTokens && !filteredCachedTokens.length) &&
-        !filteredCachedPortraits || (filteredCachedPortraits && !filteredCachedPortraits.length)
-    ) {
-        return
+    if (!filteredCachedPortraits.length) {
+        filteredCachedPortraits = filteredCachedTokens;
     }
 
     data.token = data.token || {};
@@ -420,7 +416,10 @@ function replaceArtWork(data) {
     // if we should replace the portrait art and the call is not from PreCreateToken.
     // we only change the art if the art is still the default mystery man
     // otherwise the portrait art will change every time we put a token on the scene
-    if (replaceToken === 2 || replaceToken === 3 && (!hookedFromTokenCreation || data.img === 'icons/svg/mystery-man.svg')) {
+    if (
+        (filteredCachedPortraits && filteredCachedPortraits.length) &&
+        replaceToken === 2 || replaceToken === 3 && (!hookedFromTokenCreation || data.img === 'icons/svg/mystery-man.svg')
+    ) {
         let randomIdx = Math.floor(Math.random() * (filteredCachedPortraits.length * filteredCachedPortraits.length));
         randomIdx = Math.floor(randomIdx / filteredCachedPortraits.length);
         const portraitSrc = filteredCachedPortraits[randomIdx];
@@ -429,7 +428,10 @@ function replaceArtWork(data) {
     }
 
     // we should replace the token art
-    if (replaceToken === 1 || replaceToken === 3) {
+    if (
+        (filteredCachedTokens && filteredCachedTokens.length) &&
+        replaceToken === 1 || replaceToken === 3
+    ) {
         let randomIdx = Math.floor(Math.random() * (filteredCachedTokens.length * filteredCachedTokens.length));
         randomIdx = Math.floor(randomIdx / filteredCachedTokens.length);
         const tokenSrc = filteredCachedTokens[randomIdx];
