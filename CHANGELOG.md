@@ -1,6 +1,7 @@
 # v0.2.3
 
 * Fixed bug where if Replace token & portrait art was selected, and a portrait prefix was specified. And no image was found with the portrait prefix, it didn't fall back to the normal token art and then caused neither the token nor the art to be changed.
+
 # v 0.2.2
 
 * Fix bug where when using The Forge's Assest Library, it wasn't grabbing the images correctly.
