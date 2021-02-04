@@ -395,15 +395,20 @@ async function createTokenHook(scene, tokenData, flags, id) {
 function replaceArtWork(data) {
     const formattedName = escape(data.name.trim().replace(/ /g, "_"));
     const diffDir = (difficultyName) ? `${String(getProperty(data, difficultyVariable)).replace(".", "_")}/` : "";
-    const tokenCheck = `${tokenDirectory.current}/${difficultyName}${diffDir}${formattedName}`;
+    let tokenCheck = `${tokenDirectory.current}/${difficultyName}${diffDir}${formattedName}`;
     let portraitCheck;
 
     if (portraitPrefix) {
         portraitCheck = `${tokenDirectory.current}/${difficultyName}${diffDir}${portraitPrefix}${formattedName}`;
     } else {
         portraitCheck = tokenCheck;
-    }    
-    
+    }
+
+    // Update variable values with single forward slash instead of double in case the setting passed in had a
+    // trailing slash and we added another in path assembly.
+    portraitCheck = portraitCheck.replace("//","/");
+    tokenCheck = tokenCheck.replace("//","/");
+
     const filteredCachedTokens = cachedTokens.filter(t => t.toLowerCase().indexOf(tokenCheck.toLowerCase()) >= 0);
     let filteredCachedPortraits = cachedTokens.filter(t => t.toLowerCase().indexOf(portraitCheck.toLowerCase()) >= 0);
     filteredCachedPortraits = (filteredCachedPortraits) ?? filteredCachedTokens;
