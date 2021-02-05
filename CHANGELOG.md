@@ -3,7 +3,7 @@
 * Add localisation, for future languages.
 * Remove double slashes from path in case user adds a trailing dash in the token directory setting. - @etriebe
 * Add defensive checks around actor data when trying to update actor.
-* Add debug flag and console logs dependant on debug flag
+* Add debug flag and console logs dependent on debug flag
 
 # v0.2.3
 
