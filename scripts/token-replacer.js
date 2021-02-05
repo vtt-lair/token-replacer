@@ -11,6 +11,7 @@ let difficultyName;
 let difficultyVariable;
 let portraitPrefix;
 let hookedFromTokenCreation = false;
+let debug = false;
 
 Hooks.on("renderTokenReplacerSetup", (app, html, user) => {
     DirectoryPicker.processHtml(html);
@@ -229,8 +230,17 @@ function registerSettings() {
         },
         default: 0,
     });
+
+    game.settings.register("token-replacer", "debug", {
+        name: 'Debug',
+        hint: 'Additional console logs for debugging',
+        scope: 'world',
+        type: Boolean,
+        default: false,
+        config: true,
+      });
     
-    game.settings.registerMenu("token-replacer", 'setupMenu', {
+    game.settings.registerMenu("token-replacer", "setupMenu", {
         name: "Settings",
         label: "Settings",
         hint: "Token directory settings",
@@ -295,7 +305,8 @@ function grabSavedSettings() {
     }    
     difficultyName = game.settings.get("token-replacer", "difficultyName");
     difficultyVariable = game.settings.get("token-replacer", "difficultyVariable");
-    portraitPrefix = game.settings.get("token-replacer", "portraitPrefix"); 
+    portraitPrefix = game.settings.get("token-replacer", "portraitPrefix");
+    debug = game.settings.get("token-replacer", "debug");
 }
 
 // cache the set of available tokens which can be used to replace artwork to avoid repeated filesystem requests
@@ -305,13 +316,19 @@ async function cacheAvailableFiles() {
 
     cachedTokens = [];
     
-    // any files in the root (maybe they didn't want to use subfolders)
+    if (debug) {
+        console.log(`Token Replacer: Caching root folder: '${tokenDirectory.activeSource}', '${tokenDirectory.current}'`);
+    }
+    // any files in the root (maybe they didn't want to use subfolders)    
     const rootTokens = await FilePicker.browse(tokenDirectory.activeSource, tokenDirectory.current);
     rootTokens.files.forEach(t => cachedTokens.push(t));
 
     const folders = await FilePicker.browse(tokenDirectory.activeSource, tokenDirectory.current);
     // any files in subfolders
 	for ( let folder of folders.dirs ) {
+        if (debug) {
+            console.log(`Token Replacer: Caching folders: '${tokenDirectory.activeSource}', '${folder}'`);
+        }
 		const tokens = await FilePicker.browse(tokenDirectory.activeSource, folder);
 		tokens.files.forEach(t => cachedTokens.push(t));
 	}
@@ -334,6 +351,10 @@ function preCreateActorHook(data, options, userId) {
     grabSavedSettings();
     hookedFromTokenCreation = false;
 
+    if (debug) {
+        console.log(`Token Replacer: preCreateActorHook: Data:`, data);
+    }
+
     let hasDifficultProperty = hasProperty(data, difficultyVariable);
     if (!difficultyVariable) {
         // overwrite since it's empty
@@ -351,6 +372,10 @@ function createActorHook(scene, tokenData, flags, id) {
     const passData = scene.data;
     hookedFromTokenCreation = false;
 
+    if (debug) {
+        console.log(`Token Replacer: createActorHook: Scene:`, scene);        
+    }
+
     let hasDifficultProperty = hasProperty(passData, difficultyVariable);
     if (!difficultyVariable) {
         // overwrite since it's empty
@@ -367,30 +392,64 @@ function preCreateTokenHook(scene, tokenData, flags, id) {
     // grab the saved values
     grabSavedSettings();
     const actor = game.actors.get(tokenData.actorId);    
-    const passData = actor.data;
-    hookedFromTokenCreation = true;
 
-    let hasDifficultProperty = hasProperty(passData, difficultyVariable);
-    if (!difficultyVariable) {
-        // overwrite since it's empty
-        hasDifficultProperty = true;
+    if (debug) {
+        console.log(`Token Replacer: preCreateTokenHook: Before: TokenData:`, tokenData);
+        console.log(`Token Replacer: preCreateTokenHook: Before: Actor:`, actor);        
     }
 
-    if ( !replaceToken || (passData.type !== "npc") || !hasDifficultProperty ) return;
-    replaceArtWork(passData);
-    actor.update(passData);    
+    if (actor) {
+        const passData = actor.data;
+        if (debug) {
+            console.log(`Token Replacer: preCreateTokenHook: Before: PassData:`, passData);
+        }
+        hookedFromTokenCreation = true;
+
+        let hasDifficultProperty = hasProperty(passData, difficultyVariable);
+        if (!difficultyVariable) {
+            // overwrite since it's empty
+            hasDifficultProperty = true;
+        }
+
+        if ( !replaceToken || (passData.type !== "npc") || !hasDifficultProperty ) return;
+        replaceArtWork(passData);
+        actor.update(passData);
+
+        if (debug) {
+            console.log(`Token Replacer: preCreateTokenHook: After: TokenData:`, tokenData);
+            console.log(`Token Replacer: preCreateTokenHook: After: Actor:`, actor);
+            console.log(`Token Replacer: preCreateTokenHook: After: PassData:`, passData);
+        }
+    }        
 }
 
 async function createTokenHook(scene, tokenData, flags, id) {
     const actor = game.actors.get(tokenData.actorId);
-    const token = new Token(tokenData);
 
-    token.scene = scene;
-    token.update({"img": actor.data.token.img});
+    if (debug) {
+        console.log(`Token Replacer: createTokenHook: Before: TokenData:`, tokenData);
+        console.log(`Token Replacer: createTokenHook: Before: Actor:`, actor);        
+    }
+
+    if (actor) {
+        const token = new Token(tokenData);
+
+        token.scene = scene;
+        token.update({"img": actor.data.token.img});
+
+        if (debug) {
+            console.log(`Token Replacer: createTokenHook: After: TokenData:`, tokenData);
+            console.log(`Token Replacer: createTokenHook: After: Actor:`, actor);        
+        }
+    }
 }
 
 // replace the artwork for a NPC actor with the version from this module
 function replaceArtWork(data) {
+    if (debug) {
+        console.log(`Token Replacer: Replacing Artwork`);        
+    }
+
     const formattedName = escape(data.name.trim().replace(/ /g, "_"));
     const diffDir = (difficultyName) ? `${String(getProperty(data, difficultyVariable)).replace(".", "_")}/` : "";
     let tokenCheck = `${tokenDirectory.current}/${difficultyName}${diffDir}${formattedName}`;
@@ -427,7 +486,11 @@ function replaceArtWork(data) {
         randomIdx = Math.floor(randomIdx / filteredCachedPortraits.length);
         const portraitSrc = filteredCachedPortraits[randomIdx];
 
-        data.img = portraitSrc;
+        if (debug) {
+            console.log(`Token Replacer: Replacing portrait art. From: '${data.img}', To: '${portraitSrc}'`);
+        }
+
+        data.img = portraitSrc;        
     }
 
     // we should replace the token art
@@ -439,7 +502,11 @@ function replaceArtWork(data) {
         randomIdx = Math.floor(randomIdx / filteredCachedTokens.length);
         const tokenSrc = filteredCachedTokens[randomIdx];
 
-        data.token.img = tokenSrc;            
+        if (debug) {
+            console.log(`Token Replacer: Replacing token art. From: '${data.token.img}', To: '${tokenSrc}'`);
+        }
+
+        data.token.img = tokenSrc;
     }
     
     return data;
