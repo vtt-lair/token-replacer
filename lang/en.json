@@ -1,0 +1,8 @@
+{
+    "TR.ReplaceTokenName": "Automatically replace NPC actor artwork",
+    "TR.ReplaceToken.Hint": "Automatically replace the token and/or portrait artwork for NPC actors when imported. Make sure the image file name starts with the actor name, empty spaces should be replaced by '_'. Token art will be randomised if more than one artwork is found that start with the same name. Portrait art will never randomise and will only be replaced when adding the actor the first time.",
+    "TR.ReplaceToken.Choices.Disabled": "Disabled",
+    "TR.ReplaceToken.Choices.Token": "Replace token artwork",
+    "TR.ReplaceToken.Choices.Portrait": "Replace portrait artwork",
+    "TR.ReplaceToken.Choices.TokenPortrait": "Replace token & portrait artwork"
+}

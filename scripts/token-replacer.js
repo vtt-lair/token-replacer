@@ -216,18 +216,16 @@ function ready() {
 function registerSettings() {
     // token replacement setting
     game.settings.register("token-replacer", "replaceToken", {
-        name: "Automatically replace NPC actor artwork",
-        hint: "Automatically replace the token and/or portrait artwork for NPC actors when imported. Make sure the image file name starts with the actor name, empty spaces should be replaced by '_'. " + 
-            "Token art will be randomised if more than one artwork is found that start with the same name. " +
-            "Portrait art will never randomise and will only be replaced when adding the actor the first time.",
+        name: game.i18n.localize("TR.ReplaceTokenName"),
+        hint: game.i18n.localize("TR.ReplaceToken.Hint"),
         scope: "world",
         config: true,
         type: Number,
         choices: {
-            0: "Disabled",
-            1: "Replace token artwork",
-            2: "Replace portrait artwork",
-            3: "Replace token & portrait artwork",
+            0: game.i18n.localize("TR.ReplaceToken.Choices.Disabled"),
+            1: game.i18n.localize("TR.ReplaceToken.Choices.Token"),
+            2: game.i18n.localize("TR.ReplaceToken.Choices.Portrait"),
+            3: game.i18n.localize("TR.ReplaceToken.Choices.TokenPortrait"),
         },
         default: 0,
     });
