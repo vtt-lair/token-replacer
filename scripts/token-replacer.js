@@ -217,7 +217,7 @@ function ready() {
 function registerSettings() {
     // token replacement setting
     game.settings.register("token-replacer", "replaceToken", {
-        name: game.i18n.localize("TR.ReplaceTokenName"),
+        name: game.i18n.localize("TR.ReplaceToken.Name"),
         hint: game.i18n.localize("TR.ReplaceToken.Hint"),
         scope: "world",
         config: true,
@@ -232,8 +232,8 @@ function registerSettings() {
     });
 
     game.settings.register("token-replacer", "debug", {
-        name: 'Debug',
-        hint: 'Additional console logs for debugging',
+        name: game.i18n.localize("TR.Debug.Name"),
+        hint: game.i18n.localize("TR.Debug.Hint"),
         scope: 'world',
         type: Boolean,
         default: false,
@@ -241,9 +241,9 @@ function registerSettings() {
       });
     
     game.settings.registerMenu("token-replacer", "setupMenu", {
-        name: "Settings",
-        label: "Settings",
-        hint: "Token directory settings",
+        name: game.i18n.localize("TR.Settings.Name"),
+        label: game.i18n.localize("TR.Settings.Name"),
+        hint: game.i18n.localize("TR.Settings.Hint"),
         icon: 'fas fa-wrench',
         type: TokenReplacerSetup,
         restricted: true
@@ -251,8 +251,8 @@ function registerSettings() {
 
     // token directory
     game.settings.register("token-replacer", "tokenDirectory", {
-        name: "Token Directory",
-        hint: "The directory the tokens are found in. Defaults to the free Forgotten Adventures tokens. It's however advised to change this directory to something NOT in the modules directory as new versions will overwrite any tokens you save there.",
+        name: game.i18n.localize("TR.TokenDirectory.Name"),
+        hint: game.i18n.localize("TR.TokenDirectory.Name"),
         scope: "world",
         config: false,
         type: DirectoryPicker.Directory,
@@ -261,10 +261,8 @@ function registerSettings() {
 
     // token subdirectory path setting
     game.settings.register("token-replacer", "difficultyName", {
-        name: "NPC Difficulty Name",
-        hint: "The difficulty measurement name used in your system (defaults to 'cr' for DnD 5e). " + 
-            "Token art should be put under folders named after this measurement and is case sensitive (the cr1 subfolder should have all cr1 tokens). " + 
-            "Leaving this empty will mean you need to save the images in the root of the tokens path and not in subfolders and the 'NPC Difficulty Variable' is not checked to figure out subfolder structures.",
+        name: game.i18n.localize("TR.DifficultyName.Name"),
+        hint: game.i18n.localize("TR.DifficultyName.Name"),
         scope: "world",
         config: false,
         type: String,
@@ -272,9 +270,8 @@ function registerSettings() {
     });
 
     game.settings.register("token-replacer", "difficultyVariable", {
-        name: "NPC Difficulty Variable",
-        hint: "The difficulty measurement variable used in the actor's data (defaults to DnD 5e's). This is dependant on whether you entered an 'NPC Difficulty Name'. " + 
-            "If you are unsure what the variable is, leave 'NPC Difficulty Name' empty and save everyting into the root folder.",
+        name: game.i18n.localize("TR.DifficultyVariable.Name"),
+        hint: game.i18n.localize("TR.DifficultyVariable.Name"),
         scope: "world",
         config: false,
         type: String,
@@ -282,8 +279,8 @@ function registerSettings() {
     });
 
     game.settings.register("token-replacer", "portraitPrefix", {
-        name: "Portrait Prefix",
-        hint: "The prefix used to define images that should be used when replacing portraits, instead of a token image.",
+        name: game.i18n.localize("TR.PortraitPrefix.Name"),
+        hint: game.i18n.localize("TR.PortraitPrefix.Name"),
         scope: "world",
         config: false,
         type: String,
