@@ -26,6 +26,14 @@
       <input class="setup-config" type="text" name="portrait-prefix" style="flex: 0 1 auto" ;
         value="{{setupConfig.portraitPrefix}}" />
     <hr>
+    <h3>{{localize 'TR.ImageNameFormat.Name'}}</h3>
+    <p>{{localize 'TR.ImageNameFormat.Hint'}}</p>
+      <select class="setup-config" type="text" name="image-name-format" style="flex: 0 1 auto">
+          {{#each setupConfig.nameFormats}}
+            <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{localize this.name}}</option>
+          {{/each}}
+      </select>        
+    <hr>
     <div class="setup-feedback" id="setup-feedback" style="color: red"></div>
     <button id="replacer-settings" class="settings-button" type="submit">{{localize 'TR.Save'}}</button>
   </form>
