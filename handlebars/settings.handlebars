@@ -4,28 +4,57 @@
 <div class="form-description">
   <form id="token-replacer-settings" autocomplete="off" onsubmit="event.preventDefault();">
     <hr>
+    <h2>{{localize 'TR.Heading.Directory.Name'}}</h2>
     <h3>{{localize 'TR.Required'}} {{localize 'TR.TokenDirectory.Setup.Name'}}</h3>
     <p>{{localize 'TR.TokenDirectory.Setup.Hint'}}</p>
     <div class="form-content" style="display: flex">
       <input class="setup-config" type="text" data-dtype="Directory" name="token-directory" style="flex: 0 1 auto" ;
         value="{{setupConfig.tokenDirectory}}" />
     </div>
+    
+    {{#if setupConfig.useDefinedStructures}}
     <hr>
+    <h2>{{localize 'TR.Heading.NPCVar.Name'}}</h2>
     <h3>{{localize 'TR.DifficultyName.Name'}}</h3>
     <p>{{localize 'TR.DifficultyName.Hint'}}</p>
-      <input class="setup-config" type="text" name="difficulty-name" style="flex: 0 1 auto" ;
+    <input class="setup-config" type="text" name="difficulty-name" style="flex: 0 1 auto" ;
         value="{{setupConfig.difficultyName}}" />
+
     <hr>
     <h3>{{localize 'TR.DifficultyVariable.Name'}}</h3>
     <p>{{localize 'TR.DifficultyVariable.Hint'}}</p>
-      <input class="setup-config" type="text" name="difficulty-variable" style="flex: 0 1 auto" ;
+    <input class="setup-config" type="text" name="difficulty-variable" style="flex: 0 1 auto" ;
         value="{{setupConfig.difficultyVariable}}" />
+    {{/if}}
+
     <hr>
+    <h2>{{localize 'TR.Heading.Formatting.Name'}}</h2>
     <h3>{{localize 'TR.PortraitPrefix.Name'}}</h3>
     <p>{{localize 'TR.PortraitPrefix.Hint'}}</p>
-      <input class="setup-config" type="text" name="portrait-prefix" style="flex: 0 1 auto" ;
+    <input class="setup-config" type="text" name="portrait-prefix" style="flex: 0 1 auto" ;
         value="{{setupConfig.portraitPrefix}}" />
+
+    {{#if setupConfig.useDefinedStructures}}
     <hr>
+    <h3>{{localize 'TR.FolderNameFormat.Name'}}</h3>
+    <p>{{localize 'TR.FolderNameFormat.Hint'}}</p>
+    <select class="setup-config" type="text" name="folder-name-format" style="flex: 0 1 auto">
+        {{#each setupConfig.folderFormats}}
+        <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{localize this.name}}</option>
+        {{/each}}
+    </select>
+    {{/if}}
+
+    <hr>
+    <h3>{{localize 'TR.ImageNameFormat.Name'}}</h3>
+    <p>{{localize 'TR.ImageNameFormat.Hint'}}</p>
+      <select class="setup-config" type="text" name="image-name-format" style="flex: 0 1 auto">
+          {{#each setupConfig.nameFormats}}
+            <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{localize this.name}}</option>
+          {{/each}}
+      </select>        
+    <hr>
+    
     <div class="setup-feedback" id="setup-feedback" style="color: red"></div>
     <button id="replacer-settings" class="settings-button" type="submit">{{localize 'TR.Save'}}</button>
   </form>
