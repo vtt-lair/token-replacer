@@ -490,7 +490,7 @@ async function cacheAvailableFiles() {
     }
     // any files in the root (maybe they didn't want to use subfolders)    
     const rootTokens = await FilePicker.browse(tokenDirectory.activeSource, tokenDirectory.current);
-    rootTokens.files.forEach(t => cachedTokens.push(t));
+    rootTokens.files.forEach(t => cachedTokens.push(t.toLowerCase()));
 
     const folders = await FilePicker.browse(tokenDirectory.activeSource, tokenDirectory.current);
     // any files in subfolders
@@ -499,7 +499,7 @@ async function cacheAvailableFiles() {
             console.log(`Token Replacer: Caching folders: '${tokenDirectory.activeSource}', '${folder}'`);
         }
 		const tokens = await FilePicker.browse(tokenDirectory.activeSource, folder);
-		tokens.files.forEach(t => cachedTokens.push(t));
+		tokens.files.forEach(t => cachedTokens.push(t.toLowerCase()));
 	}
 }
 
@@ -632,8 +632,8 @@ function replaceArtWork(data) {
 
     // Update variable values with single forward slash instead of double in case the setting passed in had a
     // trailing slash and we added another in path assembly.
-    portraitCheck = portraitCheck.replace("//","/");
-    tokenCheck = tokenCheck.replace("//","/");
+    portraitCheck = portraitCheck.replace("//","/").toLowerCase();
+    tokenCheck = tokenCheck.replace("//","/").toLowerCase();
 
     const filteredCachedTokens = cachedTokens.filter(t => t.toLowerCase().indexOf(tokenCheck.toLowerCase()) >= 0);
     let filteredCachedPortraits = cachedTokens.filter(t => t.toLowerCase().indexOf(portraitCheck.toLowerCase()) >= 0);
