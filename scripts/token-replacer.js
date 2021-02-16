@@ -14,8 +14,23 @@ let hookedFromTokenCreation = false;
 let imageNameFormat;
 let debug = false;
 let nameFormats = [];
+let folderFormats = [];
+
+let selectedFolderFormat;
+let selectedNameFormat;
+
+Handlebars.registerHelper('findSelected', function(elem, list, options) {
+    if (elem) {
+        return elem.find((x) => x.selected).value;
+    }
+    return "|Not Defined|";
+});
 
 Hooks.on("renderTokenReplacerSetup", (app, html, user) => {
+    DirectoryPicker.processHtml(html);
+});
+
+Hooks.on("renderSettingsConfig", (app, html, user) => {
     DirectoryPicker.processHtml(html);
 });
 
@@ -40,13 +55,23 @@ class TokenReplacerSetup extends FormApplication {
         const diffVariable = game.settings.get("token-replacer", "difficultyVariable");
         const prefix = game.settings.get("token-replacer", "portraitPrefix");
 
+        // file name formats
         let imgNameFormat = game.settings.get("token-replacer", "imageNameFormat");        
         if (imgNameFormat === null || imgNameFormat === -1) {
             imgNameFormat = 0;
         }
         if (imgNameFormat !== null && imgNameFormat > -1) {
             nameFormats[imgNameFormat].selected = true;
-        }        
+        }
+
+        // folder name formats
+        let folderNameFormat = game.settings.get("token-replacer", "folderNameFormat");        
+        if (folderNameFormat === null || folderNameFormat === -1) {
+            folderNameFormat = 0;
+        }
+        if (folderNameFormat !== null && folderNameFormat > -1) {
+            folderFormats[folderNameFormat].selected = true;
+        }
 
         const dataDirSet = !BAD_DIRS.includes(tokenDir);
 
@@ -56,6 +81,7 @@ class TokenReplacerSetup extends FormApplication {
             "difficultyVariable": diffVariable,
             "portraitPrefix": prefix,
             "nameFormats": nameFormats,
+            "folderFormats": folderFormats,
         };
 
         let diffSpecified = true;
@@ -79,14 +105,23 @@ class TokenReplacerSetup extends FormApplication {
         const diffName = formData['difficulty-name'];
         let diffVariable = formData['difficulty-variable'];
         const prefix = formData['portrait-prefix'];
+
         const imageNameFormat = formData['image-name-format'];
         const imageNameIdx = nameFormats.findIndex(x => x.value === imageNameFormat);
-
         nameFormats.forEach((x) => {
             x.selected = false;
         });
         if (imageNameIdx !== null && imageNameIdx > -1) {
             nameFormats[imageNameIdx].selected = true;
+        }
+
+        const folderNameFormat = formData['folder-name-format'];
+        const folderNameIdx = folderFormats.findIndex(x => x.value === folderNameFormat);
+        folderFormats.forEach((x) => {
+            x.selected = false;
+        });
+        if (imageNameIdx !== null && imageNameIdx > -1) {
+            folderFormats[folderNameIdx].selected = true;
         }
 
         // if not difficulty name is specified then the variable is not needed
@@ -99,7 +134,19 @@ class TokenReplacerSetup extends FormApplication {
         await game.settings.set("token-replacer", "difficultyVariable", diffVariable);
         await game.settings.set("token-replacer", "portraitPrefix", prefix);
         await game.settings.set("token-replacer", "imageNameFormat", imageNameIdx);
+        await game.settings.set("token-replacer", "folderNameFormat", folderNameIdx);
 
+        const debug = game.settings.get("token-replacer", "debug");
+        if (debug) {
+            if (folderNameFormat === "proper") {
+                folderNameFormat = " ";
+            }
+            if (imageNameFormat === "proper") {
+                imageNameFormat = " ";
+            }
+            console.log(`Token Replacer: Format Structure Setup: '${tokenDirectory.activeSource}/${tokenDirectory.current}/${diffName}${folderNameFormat}0_25/Monster${imageNameFormat}Name.png'`);
+        }
+        
         const tokenDirSet = !BAD_DIRS.includes(tokenDir);
 
         if (!tokenDirSet) {
@@ -216,10 +263,10 @@ class DirectoryPicker extends FilePicker {
         $(html).find("footer button").text("Select Directory");
     }
 }
-  
-Hooks.on("renderSettingsConfig", (app, html, user) => {
-    DirectoryPicker.processHtml(html);
-});
+
+function folderSelected(selected) {
+    selectedFolderFormat = selected.value;
+}
 
 // initialisation
 function init() {
@@ -320,9 +367,25 @@ function registerSettings() {
             2: game.i18n.localize("TR.ImageNameFormat.Choices.Dashed"),            
         },
         default: 0,
-    })
+    });
+
+    game.settings.register("token-replacer", "folderNameFormat", {
+        name: game.i18n.localize("TR.ImageNameFormat.Name"),
+        hint: game.i18n.localize("TR.ImageNameFormat.Hint"),
+        scope: "world",
+        config: false,
+        type: Number,
+        choices: {
+            0: game.i18n.localize("TR.ImageNameFormat.Choices.NoSpace"),
+            1: game.i18n.localize("TR.ImageNameFormat.Choices.Underscored"),
+            2: game.i18n.localize("TR.ImageNameFormat.Choices.Proper"),
+            3: game.i18n.localize("TR.ImageNameFormat.Choices.Dashed"),            
+        },
+        default: 0,
+    });
 
     createImageFormat(0);
+    createFolderFormat(0);
 }
 
 /** handle functions **/
@@ -350,6 +413,15 @@ function grabSavedSettings() {
         imageNameFormat = " ";
     }
 
+    let folderNameFormatIndex = game.settings.get("token-replacer", "folderNameFormat");    
+    if (folderNameFormatIndex === null || folderNameFormatIndex === -1) {
+        folderNameFormatIndex = 0;
+    }    
+    folderNameFormat = folderFormats[folderNameFormatIndex].value;
+    if (folderNameFormat === "proper") {
+        folderNameFormat = " ";
+    }
+
     debug = game.settings.get("token-replacer", "debug");
 }
 
@@ -374,6 +446,35 @@ function createImageFormat(selected) {
 
     if (selected) {
         nameFormats[selected].selected = true;
+    }        
+}
+
+function createFolderFormat(selected) {
+    folderFormats = [
+        {
+            name: "TR.FolderNameFormat.Choices.NoSpace",
+            value: "",
+            selected: false,
+        },            
+        {
+            name: "TR.FolderNameFormat.Choices.Underscored",
+            value: "_",
+            selected: false,
+        },
+        {
+            name: "TR.FolderNameFormat.Choices.Proper",
+            value: "proper",
+            selected: false,
+        },
+        {
+            name: "TR.FolderNameFormat.Choices.Dashed",
+            value: "-",
+            selected: false,
+        }
+    ];
+
+    if (selected) {
+        folderFormats[selected].selected = true;
     }        
 }
 
@@ -520,11 +621,11 @@ function replaceArtWork(data) {
 
     const formattedName = escape(data.name.trim().replace(/ /g, imageNameFormat));
     const diffDir = (difficultyName) ? `${String(getProperty(data, difficultyVariable)).replace(".", "_")}/` : "";
-    let tokenCheck = `${tokenDirectory.current}/${difficultyName}${diffDir}${formattedName}`;
+    let tokenCheck = escape(`${tokenDirectory.current}/${difficultyName}${folderNameFormat}${diffDir}${formattedName}`);
     let portraitCheck;
 
     if (portraitPrefix) {
-        portraitCheck = `${tokenDirectory.current}/${difficultyName}${diffDir}${portraitPrefix}${formattedName}`;
+        portraitCheck = escape(`${tokenDirectory.current}/${difficultyName}${folderNameFormat}${diffDir}${portraitPrefix}${formattedName}`);
     } else {
         portraitCheck = tokenCheck;
     }
