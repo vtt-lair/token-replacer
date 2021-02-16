@@ -2,6 +2,7 @@ const tokenPathDefault = "modules/token-replacer/tokens/";
 const difficultyNameDefault = "cr";
 const difficultyVariableDefault = "data.details.cr";
 const portraitPrefixDefault = "";
+const useStructureDefault = true;
 const BAD_DIRS = ["[data]", "[data] ", "", null];
 
 let cachedTokens = [];
@@ -13,6 +14,7 @@ let portraitPrefix;
 let hookedFromTokenCreation = false;
 let imageNameFormat;
 let debug = false;
+let useStructure = true;
 let nameFormats = [];
 let folderFormats = [];
 
@@ -73,6 +75,8 @@ class TokenReplacerSetup extends FormApplication {
             folderFormats[folderNameFormat].selected = true;
         }
 
+        const useDefinedStructures = game.settings.get("token-replacer", "structure");
+
         const dataDirSet = !BAD_DIRS.includes(tokenDir);
 
         const setupConfig = {
@@ -82,6 +86,7 @@ class TokenReplacerSetup extends FormApplication {
             "portraitPrefix": prefix,
             "nameFormats": nameFormats,
             "folderFormats": folderFormats,
+            "useDefinedStructures": useDefinedStructures
         };
 
         let diffSpecified = true;
@@ -299,6 +304,15 @@ function registerSettings() {
         default: 0,
     });
 
+    game.settings.register("token-replacer", "structure", {
+        name: game.i18n.localize("TR.Structure.Name"),
+        hint: game.i18n.localize("TR.Structure.Hint"),
+        scope: 'world',
+        type: Boolean,
+        default: useStructureDefault,
+        config: true,
+      });
+
     game.settings.register("token-replacer", "debug", {
         name: game.i18n.localize("TR.Debug.Name"),
         hint: game.i18n.localize("TR.Debug.Hint"),
@@ -422,6 +436,7 @@ function grabSavedSettings() {
         folderNameFormat = " ";
     }
 
+    useStructure = game.settings.get("token-replacer", "structure");
     debug = game.settings.get("token-replacer", "debug");
 }
 
@@ -490,7 +505,7 @@ async function cacheAvailableFiles() {
     }
     // any files in the root (maybe they didn't want to use subfolders)    
     const rootTokens = await FilePicker.browse(tokenDirectory.activeSource, tokenDirectory.current);
-    rootTokens.files.forEach(t => cachedTokens.push(t.toLowerCase()));
+    rootTokens.files.forEach(t => cachedTokens.push(t));
 
     const folders = await FilePicker.browse(tokenDirectory.activeSource, tokenDirectory.current);
     // any files in subfolders
@@ -499,7 +514,7 @@ async function cacheAvailableFiles() {
             console.log(`Token Replacer: Caching folders: '${tokenDirectory.activeSource}', '${folder}'`);
         }
 		const tokens = await FilePicker.browse(tokenDirectory.activeSource, folder);
-		tokens.files.forEach(t => cachedTokens.push(t.toLowerCase()));
+		tokens.files.forEach(t => cachedTokens.push(t));
 	}
 }
 
@@ -621,19 +636,25 @@ function replaceArtWork(data) {
 
     const formattedName = escape(data.name.trim().replace(/ /g, imageNameFormat));
     const diffDir = (difficultyName) ? `${String(getProperty(data, difficultyVariable)).replace(".", "_")}/` : "";
-    let tokenCheck = escape(`${tokenDirectory.current}/${difficultyName}${folderNameFormat}${diffDir}${formattedName}`);
+    let folderStructure = `${tokenDirectory.current}/${difficultyName}${folderNameFormat}${diffDir}`;
+
+    if (!useStructure) {
+        folderStructure = "";
+    }
+
+    let tokenCheck = escape(`${folderStructure}${formattedName}`);
     let portraitCheck;
 
     if (portraitPrefix) {
-        portraitCheck = escape(`${tokenDirectory.current}/${difficultyName}${folderNameFormat}${diffDir}${portraitPrefix}${formattedName}`);
+        portraitCheck = escape(`${folderStructure}${portraitPrefix}${formattedName}`);
     } else {
         portraitCheck = tokenCheck;
     }
 
     // Update variable values with single forward slash instead of double in case the setting passed in had a
     // trailing slash and we added another in path assembly.
-    portraitCheck = portraitCheck.replace("//","/").toLowerCase();
-    tokenCheck = tokenCheck.replace("//","/").toLowerCase();
+    portraitCheck = portraitCheck.replace("//","/");
+    tokenCheck = tokenCheck.replace("//","/");
 
     const filteredCachedTokens = cachedTokens.filter(t => t.toLowerCase().indexOf(tokenCheck.toLowerCase()) >= 0);
     let filteredCachedPortraits = cachedTokens.filter(t => t.toLowerCase().indexOf(portraitCheck.toLowerCase()) >= 0);

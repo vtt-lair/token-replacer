@@ -1,4 +1,7 @@
 {
+    "TR.Heading.Formatting.Name": "Formatting",
+    "TR.Heading.NPCVar.Name": "NPC Variables",
+    "TR.Heading.Directory.Name": "Directory",
     "TR.ReplaceToken.Name": "Automatically replace NPC actor artwork",
     "TR.ReplaceToken.Hint": "Automatically replace the token and/or portrait artwork for NPC actors when imported. Make sure the image file name starts with the actor name, empty spaces should be replaced by '_'. Token art will be randomised if more than one artwork is found that start with the same name. Portrait art will never randomise and will only be replaced when adding the actor the first time.",
     "TR.ReplaceToken.Choices.Disabled": "Disabled",
@@ -15,8 +18,7 @@
     "TR.FolderNameFormat.Choices.NoSpace": "No Space",
     "TR.FolderNameFormat.Choices.Proper": "Proper English",
     "TR.FolderNameFormat.Choices.Underscored": "Underscored",
-    "TR.FolderNameFormat.Choices.Dashed": "Dashed",
-    "TR.Formatting.Name": "Formatting",
+    "TR.FolderNameFormat.Choices.Dashed": "Dashed",    
     "TR.Format.Name": "Format Example",
     "TR.Format.Hint": "Example of setup format",
     "TR.Debug.Name": "Debug",
@@ -34,5 +36,7 @@
     "TR.PortraitPrefix.Name": "Portrait Prefix",
     "TR.PortraitPrefix.Hint": "The prefix used to define images that should be used when replacing portraits, instead of a token image.",
     "TR.Required": "[Required]",
-    "TR.Save": "Save"
+    "TR.Save": "Save",
+    "TR.Structure.Name": "Use NPC Difficulty Folder Structure",
+    "TR.Structure.Hint": "This is to indicate whether you are structuring the art work into folders defined by the difficulty level of the NPC. *Note* Using a structure not defined by the difficulty could cause wrong images to be used for an actor/token for e.g. placing a 'Wolf' and just checking against the name without the difficulty could place a 'Wolf Spider' token instead."
 }
