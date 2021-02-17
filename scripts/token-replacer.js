@@ -669,8 +669,9 @@ function replaceArtWork(data) {
     // we only change the art if the art is still the default mystery man
     // otherwise the portrait art will change every time we put a token on the scene
     if (
-        (filteredCachedPortraits && filteredCachedPortraits.length) &&
-        replaceToken === 2 || replaceToken === 3 && (!hookedFromTokenCreation || data.img === 'icons/svg/mystery-man.svg')
+        (replaceToken === 2 || replaceToken === 3) &&
+        (filteredCachedPortraits && filteredCachedPortraits.length > 0) &&
+        (!hookedFromTokenCreation || data.img === 'icons/svg/mystery-man.svg')
     ) {
         let randomIdx = Math.floor(Math.random() * (filteredCachedPortraits.length * filteredCachedPortraits.length));
         randomIdx = Math.floor(randomIdx / filteredCachedPortraits.length);
@@ -685,8 +686,8 @@ function replaceArtWork(data) {
 
     // we should replace the token art
     if (
-        (filteredCachedTokens && filteredCachedTokens.length) &&
-        replaceToken === 1 || replaceToken === 3
+        (replaceToken === 1 || replaceToken === 3) &&
+        (filteredCachedTokens && filteredCachedTokens.length > 0)        
     ) {
         let randomIdx = Math.floor(Math.random() * (filteredCachedTokens.length * filteredCachedTokens.length));
         randomIdx = Math.floor(randomIdx / filteredCachedTokens.length);
