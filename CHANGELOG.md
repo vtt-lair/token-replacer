@@ -1,4 +1,9 @@
+# 0.4.1
+
+* Fix an issue where compendium actor's token image is overwritten with mystery man when no token image is found.
+
 # v0.4.0
+
 * Fix an issue when trying to update image on newly created actor, specifically one dragged from a compendium.
 * Added functionality to ignore the difficulty when structuring the folders the images are saved in. This way, you can use your own structure but with the small drawback of possibly using incorrect image for a token.
 * Added the functionality to define how your folder and file names are formatted.
