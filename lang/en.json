@@ -1,4 +1,6 @@
 {
+    "TR.TokenConfig.Heading": "Token Replacer",
+    "TR.TokenConfig.Disable": "Disable Token Replacer for this token",
     "TR.Heading.Formatting.Name": "Formatting",
     "TR.Heading.NPCVar.Name": "NPC Variables",
     "TR.Heading.Directory.Name": "Directory",
