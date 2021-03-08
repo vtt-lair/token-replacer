@@ -1,3 +1,7 @@
+# 0.4.2
+
+* Add a way to disable token replacer from replacing a token.
+
 # 0.4.1
 
 * Fix an issue where compendium actor's token image is overwritten with mystery man when no token image is found.

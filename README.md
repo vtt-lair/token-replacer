@@ -42,6 +42,9 @@ The way the image is formatted.
 * 'Underscored' uses underscores '_' between words.
 * 'Dashed' uses dashes '-' between words.
 
+## Disable Token Replacer for a Token
+On the actor, click on Prototype Token in the title bar. Select the Image tab, then at the bottom of the form there will be a checkbox where you can disable token replacer for the Prototype Token. If it's disabled this means the artwork will never automatically be replaced. The portrait or token art can still be manually set, however token replacer won't look for artwork going forward.
+
 ## Tokens
 Tokens can be saved to `modules/token-replacer/tokens/`. Save the tokens either in the root folder (and make sure 'NPC Difficulty Name' is empty) or to it subsuquent 
 subfolder (dependent on creature difficulty level).
