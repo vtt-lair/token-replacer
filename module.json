@@ -25,7 +25,7 @@
     ],
     "url": "https://github.com/vtt-lair/token-replacer",
     "manifest": "https://github.com/vtt-lair/token-replacer/releases/latest/download/module.json",
-    "download": "https://github.com/vtt-lair/token-replacer/releases/download/v0.4.1/token-replacer-v0.4.2.zip",
+    "download": "https://github.com/vtt-lair/token-replacer/releases/download/v0.4.2/token-replacer-v0.4.2.zip",
     "minimumCoreVersion": "0.7.7",
     "compatibleCoreVersion": "0.7.9"
 }
