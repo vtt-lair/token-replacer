@@ -169,6 +169,7 @@ class TokenReplacerSetup extends FormApplication {
     }
 }
 
+// Directory Picker
 class DirectoryPicker extends FilePicker {
     constructor(options = {}) {
       super(options);
@@ -268,6 +269,30 @@ class DirectoryPicker extends FilePicker {
         $(html).find("footer button").text("Select Directory");
     }
 }
+
+// Token Config
+const TokenReplacerDisabler = {
+    getReplacerDisabled: function(token) {
+        return token.getFlag('token-replacer', 'disabled');
+    },
+
+    onConfigRender: function(config, html) {
+		const disabled = TokenReplacerDisabler.getReplacerDisabled(config.token);
+		const imageTab = html.find('.tab[data-tab="image"]');
+
+		imageTab.append($(`
+			<fieldset class="token-replacer">
+				<legend>${game.i18n.localize('TR.TokenConfig.Heading')}</legend>
+                <label class="checkbox">
+                    <input type="checkbox" name="flags.token-replacer.disabled"
+                            ${disabled ? 'checked' : ''}>
+                    ${game.i18n.localize('TR.TokenConfig.Disable')}
+                </label>			
+			</fieldset>
+		`));
+	}
+}
+Hooks.on("renderTokenConfig", TokenReplacerDisabler.onConfigRender);
 
 function folderSelected(selected) {
     selectedFolderFormat = selected.value;
@@ -573,6 +598,11 @@ function createActorHook(data, tokenData, flags, id) {
 
 // handle preCreateToken hook
 function preCreateTokenHook(scene, tokenData, flags, id) {
+    // if we disabled token replacer on this token, use the token that's there
+    if (tokenData.flags["token-replacer"] && tokenData.flags["token-replacer"].disabled) {
+        return;
+    }
+
     // grab the saved values
     grabSavedSettings();
     const actor = game.actors.get(tokenData.actorId);    
@@ -608,6 +638,11 @@ function preCreateTokenHook(scene, tokenData, flags, id) {
 }
 
 async function createTokenHook(scene, tokenData, flags, id) {
+    // if we disabled token replacer on this token, use the token that's there
+    if (tokenData.flags["token-replacer"] && tokenData.flags["token-replacer"].disabled) {
+        return;
+    }
+
     const actor = game.actors.get(tokenData.actorId);
 
     if (debug) {
