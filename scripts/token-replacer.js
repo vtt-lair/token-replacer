@@ -13,7 +13,7 @@ let difficultyVariable;
 let portraitPrefix;
 let hookedFromTokenCreation = false;
 let imageNameFormat;
-let debug = false;
+let isTRDebug = false;
 let useStructure = true;
 let nameFormats = [];
 let folderFormats = [];
@@ -141,8 +141,8 @@ class TokenReplacerSetup extends FormApplication {
         await game.settings.set("token-replacer", "imageNameFormat", imageNameIdx);
         await game.settings.set("token-replacer", "folderNameFormat", folderNameIdx);
 
-        const debug = game.settings.get("token-replacer", "debug");
-        if (debug) {
+        const isTRDebug = game.settings.get("token-replacer", "debug");
+        if (isTRDebug) {
             if (folderNameFormat === "proper") {
                 folderNameFormat = " ";
             }
@@ -462,7 +462,7 @@ function grabSavedSettings() {
     }
 
     useStructure = game.settings.get("token-replacer", "structure");
-    debug = game.settings.get("token-replacer", "debug");
+    isTRDebug = game.settings.get("token-replacer", "debug");
 }
 
 function createImageFormat(selected) {
@@ -525,7 +525,7 @@ async function cacheAvailableFiles() {
 
     cachedTokens = [];
     
-    if (debug) {
+    if (isTRDebug) {
         console.log(`Token Replacer: Caching root folder: '${tokenDirectory.activeSource}', '${tokenDirectory.current}'`);
     }
     // any files in the root (maybe they didn't want to use subfolders)    
@@ -535,7 +535,7 @@ async function cacheAvailableFiles() {
     const folders = await FilePicker.browse(tokenDirectory.activeSource, tokenDirectory.current);
     // any files in subfolders
 	for ( let folder of folders.dirs ) {
-        if (debug) {
+        if (isTRDebug) {
             console.log(`Token Replacer: Caching folders: '${tokenDirectory.activeSource}', '${folder}'`);
         }
 		const tokens = await FilePicker.browse(tokenDirectory.activeSource, folder);
@@ -560,7 +560,7 @@ function preCreateActorHook(data, options, userId) {
     grabSavedSettings();
     hookedFromTokenCreation = false;
 
-    if (debug) {
+    if (isTRDebug) {
         console.log(`Token Replacer: preCreateActorHook: Data:`, data);
     }
 
@@ -581,7 +581,7 @@ function createActorHook(data, tokenData, flags, id) {
     const passData = data.data;
     hookedFromTokenCreation = false;
 
-    if (debug) {
+    if (isTRDebug) {
         console.log(`Token Replacer: createActorHook: Data:`, data);        
     }
 
@@ -607,14 +607,14 @@ function preCreateTokenHook(scene, tokenData, flags, id) {
     grabSavedSettings();
     const actor = game.actors.get(tokenData.actorId);    
 
-    if (debug) {
+    if (isTRDebug) {
         console.log(`Token Replacer: preCreateTokenHook: Before: TokenData:`, tokenData);
         console.log(`Token Replacer: preCreateTokenHook: Before: Actor:`, actor);        
     }
 
     if (actor) {
         const passData = actor.data;
-        if (debug) {
+        if (isTRDebug) {
             console.log(`Token Replacer: preCreateTokenHook: Before: PassData:`, passData);
         }
         hookedFromTokenCreation = true;
@@ -629,7 +629,7 @@ function preCreateTokenHook(scene, tokenData, flags, id) {
         replaceArtWork(passData);
         actor.update(passData);
 
-        if (debug) {
+        if (isTRDebug) {
             console.log(`Token Replacer: preCreateTokenHook: After: TokenData:`, tokenData);
             console.log(`Token Replacer: preCreateTokenHook: After: Actor:`, actor);
             console.log(`Token Replacer: preCreateTokenHook: After: PassData:`, passData);
@@ -645,7 +645,7 @@ async function createTokenHook(scene, tokenData, flags, id) {
 
     const actor = game.actors.get(tokenData.actorId);
 
-    if (debug) {
+    if (isTRDebug) {
         console.log(`Token Replacer: createTokenHook: Before: TokenData:`, tokenData);
         console.log(`Token Replacer: createTokenHook: Before: Actor:`, actor);        
     }
@@ -656,7 +656,7 @@ async function createTokenHook(scene, tokenData, flags, id) {
         token.scene = scene;
         token.update({"img": actor.data.token.img});
 
-        if (debug) {
+        if (isTRDebug) {
             console.log(`Token Replacer: createTokenHook: After: TokenData:`, tokenData);
             console.log(`Token Replacer: createTokenHook: After: Actor:`, actor);        
         }
@@ -665,7 +665,7 @@ async function createTokenHook(scene, tokenData, flags, id) {
 
 // replace the artwork for a NPC actor with the version from this module
 function replaceArtWork(data) {
-    if (debug) {
+    if (isTRDebug) {
         console.log(`Token Replacer: Replacing Artwork`);        
     }
 
@@ -712,7 +712,7 @@ function replaceArtWork(data) {
         randomIdx = Math.floor(randomIdx / filteredCachedPortraits.length);
         const portraitSrc = filteredCachedPortraits[randomIdx];
 
-        if (debug) {
+        if (isTRDebug) {
             console.log(`Token Replacer: Replacing portrait art. From: '${data.img}', To: '${portraitSrc}'`);
         }
 
@@ -728,7 +728,7 @@ function replaceArtWork(data) {
         randomIdx = Math.floor(randomIdx / filteredCachedTokens.length);
         const tokenSrc = filteredCachedTokens[randomIdx];
 
-        if (debug) {
+        if (isTRDebug) {
             console.log(`Token Replacer: Replacing token art. From: '${data.token.img}', To: '${tokenSrc}'`);
         }
 

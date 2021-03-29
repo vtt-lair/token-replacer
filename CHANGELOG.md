@@ -1,3 +1,7 @@
+# 0.4.3
+
+* Rename debug variable to more unique name as it causes issue with other modules
+
 # 0.4.2
 
 * Add a way to disable token replacer from replacing a token.
