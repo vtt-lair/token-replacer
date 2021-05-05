@@ -1,3 +1,8 @@
+# 0.4.4
+
+* Fixed an issue with saving settings when 'Use NPC Difficulty Folder Structure' is unchecked
+* Removed the mystery man check for portrait on token creation, since we have a portrait prefix to force portraits to one specific image
+
 # 0.4.3
 
 * Rename debug variable to more unique name as it causes issue with other modules
