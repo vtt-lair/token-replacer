@@ -116,7 +116,7 @@ class TokenReplacerSetup extends FormApplication {
         nameFormats.forEach((x) => {
             x.selected = false;
         });
-        if (imageNameIdx !== null && imageNameIdx > -1) {
+        if (imageNameIdx !== null && imageNameIdx > -1 && nameFormats[imageNameIdx]) {
             nameFormats[imageNameIdx].selected = true;
         }
 
@@ -125,7 +125,7 @@ class TokenReplacerSetup extends FormApplication {
         folderFormats.forEach((x) => {
             x.selected = false;
         });
-        if (imageNameIdx !== null && imageNameIdx > -1) {
+        if (folderNameIdx !== null && folderNameIdx > -1) {
             folderFormats[folderNameIdx].selected = true;
         }
 
@@ -705,8 +705,7 @@ function replaceArtWork(data) {
     // otherwise the portrait art will change every time we put a token on the scene
     if (
         (replaceToken === 2 || replaceToken === 3) &&
-        (filteredCachedPortraits && filteredCachedPortraits.length > 0) &&
-        (!hookedFromTokenCreation || data.img === 'icons/svg/mystery-man.svg')
+        (filteredCachedPortraits && filteredCachedPortraits.length > 0)
     ) {
         let randomIdx = Math.floor(Math.random() * (filteredCachedPortraits.length * filteredCachedPortraits.length));
         randomIdx = Math.floor(randomIdx / filteredCachedPortraits.length);
