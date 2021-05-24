@@ -1,3 +1,10 @@
+# 0.5.0
+
+* Migrate module to 0.8.x
+* Change the way tokens and actors hook events are handled
+* Change the way tokens are created
+* Change the way tokens and actors are updated
+
 # 0.4.4
 
 * Fixed an issue with saving settings when 'Use NPC Difficulty Folder Structure' is unchecked
