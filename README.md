@@ -1,7 +1,9 @@
-![Previous Release Download Count](https://img.shields.io/badge/dynamic/json?label=Downloads@v0.4.4%20(for%200.7.9)&query=assets%5B1%5D.download_count&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fvtt-lair%2Ftoken-replacer%2Freleases%2F42496894) ![Latest Release Download Count](https://img.shields.io/badge/dynamic/json?color=blue&label=Downloads%40latest&query=assets%5B1%5D.download_count&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fvtt-lair%2Ftoken-replacer%2Freleases%2Flatest) [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Ftoken-replacer&colorB=4aa94a)](https://forge-vtt.com/bazaar#package=token-replacer) 
+![Previous Release Download Count](https://img.shields.io/badge/dynamic/json?label=Downloads@v0.4.4%20(for%200.7.9)&query=assets%5B1%5D.download_count&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fvtt-lair%2Ftoken-replacer%2Freleases%2F42496894) [![Manifest for Foundry VTT 0.7.9](https://img.shields.io/badge/Manifest%20for%20Foundry%20VTT-0.7.9-blue)](https://github.com/vtt-lair/token-replacer/releases/download/v0.4.4/module.json)
+
+![Latest Release Download Count](https://img.shields.io/badge/dynamic/json?color=blue&label=Downloads%40latest&query=assets%5B1%5D.download_count&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fvtt-lair%2Ftoken-replacer%2Freleases%2Flatest) [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Ftoken-replacer&colorB=4aa94a)](https://forge-vtt.com/bazaar#package=token-replacer) 
 ![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fvtt-lair%2Ftoken-replacer%2Fmaster%2Fmodule.json&label=Foundry%20Version&query=$.compatibleCoreVersion&colorB=orange)
 
-[![Manifest for Foundry VTT 0.7.9](https://img.shields.io/badge/Manifest%20for%20Foundry%20VTT-0.7.9-blue)](https://github.com/vtt-lair/token-replacer/releases/download/v0.4.4/module.json)
+
 
 # Token Replacer
 Automatically replace NPC actor tokens and/or portraits dependent on token assets saved in a defined folder structure. Allows randomisation of token artwork, if more
