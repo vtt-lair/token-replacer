@@ -546,7 +546,7 @@ async function cacheAvailableFiles() {
 // hook events hooked up
 function hookupEvents() {
     // setup hook for replacement before and during actor creation
-    Hooks.on("preCreateActor", preCreateActorHook);
+    //Hooks.on("preCreateActor", preCreateActorHook);
     Hooks.on("createActor", createActorHook);    
     
     // make sure we change the image each time we drag a token from the actors
@@ -555,109 +555,115 @@ function hookupEvents() {
 }
 
 // handle preCreateActor hook
-function preCreateActorHook(data, options, userId) {
+function preCreateActorHook(document, options, userId) {
     // grab the saved values
     grabSavedSettings();
     hookedFromTokenCreation = false;
 
     if (isTRDebug) {
-        console.log(`Token Replacer: preCreateActorHook: Data:`, data);
+        console.log(`Token Replacer: preCreateActorHook: Data:`, document);
     }
 
-    let hasDifficultProperty = hasProperty(data, difficultyVariable);
+    let hasDifficultProperty = hasProperty(document, difficultyVariable);
     if (!difficultyVariable) {
         // overwrite since it's empty
         hasDifficultProperty = true;
     }
 
-    if ( !replaceToken || (data.type !== "npc") || !hasDifficultProperty ) return;
-    replaceArtWork(data);    
+    if ( !replaceToken || (document.type !== "npc") || !hasDifficultProperty ) return;
+    replaceArtWork(document);
+    document.update({
+        "img": document.data.img,
+        "token.img": document.data.token.img,
+    });    
 }
 
 // handle createActor hook
-function createActorHook(data, tokenData, flags, id) {
+function createActorHook(document, options, userId) {
     // grab the saved values
     grabSavedSettings();
-    const passData = data.data;
     hookedFromTokenCreation = false;
 
     if (isTRDebug) {
-        console.log(`Token Replacer: createActorHook: Data:`, data);        
+        console.log(`Token Replacer: createActorHook: Data:`, document);        
     }
 
-    let hasDifficultProperty = hasProperty(passData, difficultyVariable);
+    let hasDifficultProperty = hasProperty(document.data, difficultyVariable);
     if (!difficultyVariable) {
         // overwrite since it's empty
         hasDifficultProperty = true;
     }
 
-    if ( !replaceToken || (passData.type !== "npc") || !hasDifficultProperty ) return;
-    replaceArtWork(passData);
-    data.update(passData);
+    if ( !replaceToken || (document.data.type !== "npc") || !hasDifficultProperty ) return;
+    replaceArtWork(document.data);
+    document.update({
+        "img": document.data.img,
+        "token.img": document.data.token.img,
+    });
 }
 
 // handle preCreateToken hook
-function preCreateTokenHook(scene, tokenData, flags, id) {
+function preCreateTokenHook(document, options, userId) {
     // if we disabled token replacer on this token, use the token that's there
-    if (tokenData.flags["token-replacer"] && tokenData.flags["token-replacer"].disabled) {
+    if (document.data.flags["token-replacer"] && document.data.flags["token-replacer"].disabled) {
         return;
     }
 
     // grab the saved values
     grabSavedSettings();
-    const actor = game.actors.get(tokenData.actorId);    
+    const actor = game.actors.get(document.data.actorId);    
 
     if (isTRDebug) {
-        console.log(`Token Replacer: preCreateTokenHook: Before: TokenData:`, tokenData);
+        console.log(`Token Replacer: preCreateTokenHook: Before: TokenData:`, document.data);
         console.log(`Token Replacer: preCreateTokenHook: Before: Actor:`, actor);        
     }
 
     if (actor) {
-        const passData = actor.data;
         if (isTRDebug) {
-            console.log(`Token Replacer: preCreateTokenHook: Before: PassData:`, passData);
+            console.log(`Token Replacer: preCreateTokenHook: Before: PassData:`, actor.data);
         }
         hookedFromTokenCreation = true;
 
-        let hasDifficultProperty = hasProperty(passData, difficultyVariable);
+        let hasDifficultProperty = hasProperty(actor.data, difficultyVariable);
         if (!difficultyVariable) {
             // overwrite since it's empty
             hasDifficultProperty = true;
         }
 
-        if ( !replaceToken || (passData.type !== "npc") || !hasDifficultProperty ) return;
-        replaceArtWork(passData);
-        actor.update(passData);
+        if ( !replaceToken || (actor.data.type !== "npc") || !hasDifficultProperty ) return;
+        replaceArtWork(actor.data);
+        actor.update({
+            "img": actor.data.img,
+            "token.img": actor.data.token.img,
+        });
 
         if (isTRDebug) {
-            console.log(`Token Replacer: preCreateTokenHook: After: TokenData:`, tokenData);
+            console.log(`Token Replacer: preCreateTokenHook: After: TokenData:`, document.data);
             console.log(`Token Replacer: preCreateTokenHook: After: Actor:`, actor);
-            console.log(`Token Replacer: preCreateTokenHook: After: PassData:`, passData);
+            console.log(`Token Replacer: preCreateTokenHook: After: PassData:`, actor.data);
         }
     }        
 }
 
-async function createTokenHook(scene, tokenData, flags, id) {
+async function createTokenHook(document, options, userId) {
     // if we disabled token replacer on this token, use the token that's there
-    if (tokenData.flags["token-replacer"] && tokenData.flags["token-replacer"].disabled) {
+    if (document.data.flags["token-replacer"] && document.data.flags["token-replacer"].disabled) {
         return;
     }
 
-    const actor = game.actors.get(tokenData.actorId);
+    const actor = game.actors.get(document.data.actorId);
 
     if (isTRDebug) {
-        console.log(`Token Replacer: createTokenHook: Before: TokenData:`, tokenData);
+        console.log(`Token Replacer: createTokenHook: Before: TokenData:`, document.data);
         console.log(`Token Replacer: createTokenHook: Before: Actor:`, actor);        
     }
 
     if (actor) {
-        const token = new Token(tokenData);
-
-        token.scene = scene;
+        const token = new Token(document, document._object.scene);
         token.update({"img": actor.data.token.img});
 
         if (isTRDebug) {
-            console.log(`Token Replacer: createTokenHook: After: TokenData:`, tokenData);
+            console.log(`Token Replacer: createTokenHook: After: TokenData:`, document.data);
             console.log(`Token Replacer: createTokenHook: After: Actor:`, actor);        
         }
     }
