@@ -1,3 +1,6 @@
+# 0.5.1
+
+* Refactor code to ensure clashing with other modules won't happen
 # 0.5.0
 
 * Migrate module to 0.8.x
