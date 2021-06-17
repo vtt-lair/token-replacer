@@ -568,11 +568,6 @@ async function tokenReplacerCacheAvailableFiles() {
 }
 
 async function registerTokenReplacerSettings() {
-    let actor = await Actor.create({
-        name: "Dummy NPC",
-        type: "npc",    
-    });
-
     // token replacement setting
     game.settings.register("token-replacer", "replaceToken", {
         name: game.i18n.localize("TR.ReplaceToken.Name"),
