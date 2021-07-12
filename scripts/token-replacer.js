@@ -461,7 +461,7 @@ const TokenReplacer = {
             console.log(`Token Replacer: Replacing Artwork`);        
         }
 
-        const formattedName = escape(data.name.trim().replace(/ /g, tr_imageNameFormat));
+        const formattedName = data.name.trim().replace(/ /g, tr_imageNameFormat);
         const diffDir = (tr_difficultyName) ? `${String(getProperty(data, tr_difficultyVariable)).replace(".", "_")}/` : "";
         let folderStructure = `${tr_tokenDirectory.current}/${tr_difficultyName}${folderNameFormat}${diffDir}`;
 
