@@ -103,7 +103,8 @@ class TokenReplacerSetup extends FormApplication {
         let diffVariable = formData['difficulty-variable'];
         const prefix = formData['portrait-prefix'];
 
-        const imageNameFormat = formData['image-name-format'];
+        // can’t be const because it’s overwritten for debug logging
+        let imageNameFormat = formData['image-name-format'];
         const imageNameIdx = tr_nameFormats.findIndex(x => x.value === imageNameFormat);
         tr_nameFormats.forEach((x) => {
             x.selected = false;
@@ -112,7 +113,7 @@ class TokenReplacerSetup extends FormApplication {
             tr_nameFormats[imageNameIdx].selected = true;
         }
 
-        const folderNameFormat = formData['folder-name-format'];
+        let folderNameFormat = formData['folder-name-format'];
         const folderNameIdx = tr_folderFormats.findIndex(x => x.value === folderNameFormat);
         tr_folderFormats.forEach((x) => {
             x.selected = false;
@@ -143,7 +144,7 @@ class TokenReplacerSetup extends FormApplication {
             }
             console.log(`Token Replacer: Format Structure Setup: '${tr_tokenDirectory.activeSource}/${tr_tokenDirectory.current}/${diffName}${folderNameFormat}0_25/Monster${imageNameFormat}Name.png'`);
         }
-        
+
         const tokenDirSet = !tr_BAD_DIRS.includes(tokenDir);
 
         if (!tokenDirSet) {
@@ -156,7 +157,7 @@ class TokenReplacerSetup extends FormApplication {
             throw new Error(`If there is a 'Difficulty Name', you NEED to specify the 'Difficulty Variable'.`);
         } else {
             // recache the tokens
-            tokenReplacerCacheAvailableFiles();            
+            tokenReplacerCacheAvailableFiles();
         }
     }
 }
@@ -477,14 +478,23 @@ const TokenReplacer = {
 
         // Update variable values with single forward slash instead of double in case the setting passed in had a
         // trailing slash and we added another in path assembly.
-        portraitCheck = portraitCheck.replace("//","/");
-        tokenCheck = tokenCheck.replace("//","/");
+        portraitCheck = portraitCheck.replace("//","/").toLowerCase();
+        tokenCheck = tokenCheck.replace("//","/").toLowerCase();
 
-        const filteredCachedTokens = tr_cachedTokens.filter(t => t.toLowerCase().indexOf(tokenCheck.toLowerCase()) >= 0);
-        let filteredCachedPortraits = tr_cachedTokens.filter(t => t.toLowerCase().indexOf(portraitCheck.toLowerCase()) >= 0);
+        if (tr_isTRDebug) {
+            console.log(`Token Replacer: searching for token for ${tokenCheck}`);
+            console.log(`Token Replacer: searching for portrait for ${portraitCheck}`);
+        }
+
+        const filteredCachedTokens = tr_cachedTokens.filter(t => t.toLowerCase().indexOf(tokenCheck) >= 0);
+        let filteredCachedPortraits = tr_cachedTokens.filter(t => t.toLowerCase().indexOf(portraitCheck) >= 0);
         filteredCachedPortraits = (filteredCachedPortraits) ?? filteredCachedTokens;
         if (!filteredCachedPortraits.length) {
             filteredCachedPortraits = filteredCachedTokens;
+        }
+        if (tr_isTRDebug) {
+            console.log(`Token Replacer: Found these tokens: ${filteredCachedTokens}`);
+            console.log(`Token Replacer: Found these portraits: ${filteredCachedPortraits}`);
         }
 
         data.token = data.token || {};
