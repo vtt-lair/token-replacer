@@ -373,7 +373,9 @@ const TokenReplacer = {
         }
 
         let hasDifficultProperty = hasProperty(document.data, tr_difficultyVariable);
-        if (!tr_difficultyVariable) {
+        // Disabling the folder structure hides the relevant input fields but doesn’t actually clear tr_difficultyVariable,
+        // so users would have to empty the text field before disabling folder structure if we don’t check for it here:
+        if (!tr_difficultyVariable || !tr_useStructure) {
             // overwrite since it's empty
             hasDifficultProperty = true;
         }
