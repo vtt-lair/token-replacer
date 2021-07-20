@@ -643,7 +643,7 @@ async function registerTokenReplacerSettings() {
     // token directory
     game.settings.register("token-replacer", "tokenDirectory", {
         name: game.i18n.localize("TR.TokenDirectory.Name"),
-        hint: game.i18n.localize("TR.TokenDirectory.Name"),
+        hint: game.i18n.localize("TR.TokenDirectory.Hint"),
         scope: "world",
         group: "structure",
         config: false,
@@ -654,7 +654,7 @@ async function registerTokenReplacerSettings() {
     // token subdirectory path setting
     game.settings.register("token-replacer", "difficultyName", {
         name: game.i18n.localize("TR.DifficultyName.Name"),
-        hint: game.i18n.localize("TR.DifficultyName.Name"),
+        hint: game.i18n.localize("TR.DifficultyName.Hint"),
         scope: "world",
         group: "structure",
         config: false,
@@ -664,7 +664,7 @@ async function registerTokenReplacerSettings() {
 
     game.settings.register("token-replacer", "difficultyVariable", {
         name: game.i18n.localize("TR.DifficultyVariable.Name"),
-        hint: game.i18n.localize("TR.DifficultyVariable.Name"),
+        hint: game.i18n.localize("TR.DifficultyVariable.Hint"),
         scope: "world",
         group: "structure",
         config: false,
@@ -674,7 +674,7 @@ async function registerTokenReplacerSettings() {
 
     game.settings.register("token-replacer", "portraitPrefix", {
         name: game.i18n.localize("TR.PortraitPrefix.Name"),
-        hint: game.i18n.localize("TR.PortraitPrefix.Name"),
+        hint: game.i18n.localize("TR.PortraitPrefix.Hint"),
         scope: "world",
         group: "format",
         config: false,
