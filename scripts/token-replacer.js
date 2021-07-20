@@ -17,6 +17,7 @@ let tr_isTRDebug = false;
 let tr_useStructure = 1;
 let tr_nameFormats = [];
 let tr_folderFormats = [];
+let tr_definedVariableList = null;
 
 // Token Replacer Setup Menu
 class TokenReplacerSetup extends FormApplication {
@@ -81,6 +82,10 @@ class TokenReplacerSetup extends FormApplication {
             s.isCheckbox = setting.type === Boolean;
             s.isSelect = s.choices !== undefined;
             s.isRange = (setting.type === Number) && s.range;
+
+            if (s.key === 'difficultyVariable') {
+                s.dataList = tr_definedVariableList;
+            }
 
             const group = s.group;
             let groupTab = data.tabs.find(tab => tab.name === group) ?? false;
@@ -715,6 +720,7 @@ async function registerTokenReplacerSettings() {
 
     createImageFormat(0);
     createFolderFormat(0);
+    createDefinedVariableList();
 }
 
 function createImageFormat(selected) {
@@ -768,6 +774,24 @@ function createFolderFormat(selected) {
     if (selected) {
         tr_folderFormats[selected].selected = true;
     }        
+}
+
+function createDefinedVariableList() {
+    switch (game.system.id) {
+        case 'dnd5eJP':
+        case 'dnd5e':
+        case 'sw5e':
+            tr_definedVariableList = {
+                'data.details.cr': 'TR.DefinedList.CR',
+                'data.details.type.value': 'TR.DefinedList.Type',
+                'data.details.alignment': 'TR.DefinedList.Alignment',
+                'data.details.xp.value': 'TR.DefinedList.XP',
+            };
+            break;
+
+        default: 
+            tr_definedVariableList = null;
+    }
 }
 
 Hooks.on("renderTokenReplacerSetup", (app, html, user) => {

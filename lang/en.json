@@ -44,6 +44,10 @@
     "TR.Structure.Choices.Defined": "Defined Structure",
     "TR.Structure.Choices.Undefined": "Undefined Structure",
     "TR.Structure.Choices.Root": "Root",
-    "TR.Settings.Title.Name": "Token Replacer Settings"
+    "TR.Settings.Title.Name": "Token Replacer Settings",
+    "TR.DefinedList.CR": "CR",
+    "TR.DefinedList.Type": "Type",
+    "TR.DefinedList.Alignment": "Alignment",
+    "TR.DefinedList.XP": "XP"
 }
 
