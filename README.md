@@ -18,7 +18,7 @@ This is where you enable or disable the token/portrait replacement. There are 4 
 * Replace portrait artwork - same as above only just replace the portrait artwork.
 * Replace token& portrait artwork - combine the 2 options above.
 
-### Structure
+### Structure Tab
 #### Folder Structure
 How you're images are organised. 1) Root: Images are all saved in the directory specified below. 2) Defined Structure: Images are all saved in subdirectories specified by a defined variable (like CR for example). 3) Undefined Structure: Images are all saved in subdirectories that's not controlled by a defined variable.   
 *Warning* Using 'Root' or 'Undefined Structure' could cause wrong images to be used for an actor/token for e.g. placing a 'Wolf' and just checking against the name a 'Wolf Spider' image instead.
@@ -32,6 +32,7 @@ The name used in your system (defaults to 'cr' for DnD 5e) that you prefix your 
 #### Defined Structure Variable
 The defined structure variable used in the actor's data (defaults to DnD 5e's). This is dependant on whether you entered an 'Defined Structure Prefix'. If you are unsure what the variable is, leave 'Defined Structure Prefix' empty and save everyting into the root folder.
 
+### Formatting Tab
 #### Portrait Prefix
 The prefix used to define images that should be used when replacing portraits, instead of a token image. This is used if you want to specify a specific artwork that should be used for the portrait replacement. It uses the prefix exactly as you define it, i.e. if you use "prefix", the the file needs to be called "prefixDeep_Scion.png", if you use "p_" for instance, th file name has to be "p_Deep_Scion.png".
 
@@ -52,16 +53,15 @@ The way the difficulty folder is formatted.
 ## Disable Token Replacer for a Token
 On the actor, click on Prototype Token in the title bar. Select the Image tab, then at the bottom of the form there will be a checkbox where you can disable token replacer for the Prototype Token. If it's disabled this means the artwork will never automatically be replaced. The portrait or token art can still be manually set, however token replacer won't look for artwork going forward.
 
-![Token Replacer Disabler](https://github.com/Werner-Dohse/token-replacer/blob/main/example/token-replacer-disabler.jpg "Token Replacer Disabler")
+![Token Replacer Disabler](https://github.com/vtt-lair/token-replacer/blob/main/example/disabler.jpg "Token Replacer Disabler")
+The settings in the gif is old.
 
 ## Tokens
-Tokens can be saved to `modules/token-replacer/tokens/`. Save the tokens either in the root folder (and make sure 'NPC Difficulty Name' is empty) or to it subsuquent 
-subfolder (dependent on creature difficulty level).
+Save the tokens either in the root folder (if Root structure is selected) OR to the subfolder structure specified in the settings (if Defined Structure) OR any subfolder structure (if Undefined Structure is selected.)
 
-Token file names need to start with the creature name and spaces in names need to be replaced by underscores ('_'). In order to randomise token artwork, more than one file can be supplied as long as the file name starts with the creature name eg 'Dire_Wolf_1.png', 'Dire_Wolf_2.png', 'Dire_Wolf_Black.png'. The randomisation only happens with token art and not portrait art.
-
+Token file names need to be in the format as specified on the formatting tab.
 If no artwork is found for the creature, it will use the artwork already linked to that actor.
 
-> Tokens found in the module are free tokens supplied by **Forgotten Adventures**: [Patreon](https://www.patreon.com/forgottenadventures) [Website](https://www.forgotten-adventures.net/)
+> Tokens found in the module are free tokens supplied by **Forgotten Adventures**: [Patreon](https://www.patreon.com/forgottenadventures) [Website](https://www.forgotten-adventures.net/). If you would like to use them, please move them out to your own token folder.
 
-![Token Replacer in Action](https://github.com/Werner-Dohse/token-replacer/blob/main/example/Token-Replacer.gif "Token Replacer in Action")
+![Token Replacer in Action](https://github.com/vtt-lair/token-replacer/blob/main/example/Token-Replacer.gif "Token Replacer in Action")
