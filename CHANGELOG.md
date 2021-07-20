@@ -1,6 +1,18 @@
+# 0.5.2
+
+* Fix proper english check that was being replaced by double escape characters - @kageru
+* Fix check if not using defined strucutre - @kageru
+* Add extra debug logging - @kageru
+* Change settings menu structure to have beter UX
+* Change the NPC Difficulty Structure to rather be a dropdown box with 3 choices
+    * Root - all images are saved directly in the root (previously unticked NPC Difficulty Structure setting)
+    * Defined Structure - uses a defined structure using a variable setting from the actor (like CR for instance)
+    * Undefined Structure - have subfolders that's not defined by an actor variable.
+
 # 0.5.1
 
 * Refactor code to ensure clashing with other modules won't happen
+
 # 0.5.0
 
 * Migrate module to 0.8.x
