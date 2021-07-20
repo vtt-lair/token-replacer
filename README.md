@@ -54,7 +54,6 @@ The way the difficulty folder is formatted.
 On the actor, click on Prototype Token in the title bar. Select the Image tab, then at the bottom of the form there will be a checkbox where you can disable token replacer for the Prototype Token. If it's disabled this means the artwork will never automatically be replaced. The portrait or token art can still be manually set, however token replacer won't look for artwork going forward.
 
 ![Token Replacer Disabler](https://github.com/vtt-lair/token-replacer/blob/main/example/disabler.jpg "Token Replacer Disabler")
-The settings in the gif is old.
 
 ## Tokens
 Save the tokens either in the root folder (if Root structure is selected) OR to the subfolder structure specified in the settings (if Defined Structure) OR any subfolder structure (if Undefined Structure is selected.)
@@ -65,3 +64,5 @@ If no artwork is found for the creature, it will use the artwork already linked 
 > Tokens found in the module are free tokens supplied by **Forgotten Adventures**: [Patreon](https://www.patreon.com/forgottenadventures) [Website](https://www.forgotten-adventures.net/). If you would like to use them, please move them out to your own token folder.
 
 ![Token Replacer in Action](https://github.com/vtt-lair/token-replacer/blob/main/example/Token-Replacer.gif "Token Replacer in Action")
+
+The settings in the gif is old.
