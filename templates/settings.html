@@ -21,7 +21,17 @@
         <span class="range-value">{{this.value}}</span>
 
         {{else}}
+        {{#if this.dataList}}
+        <input type="text" list="{{this.module}}.{{this.key}}.datalist" name="{{this.module}}.{{this.key}}" value="{{this.value}}" data-dtype="{{this.type}}"/>
+            <datalist id="{{this.module}}.{{this.key}}.datalist">
+                {{#each this.dataList as |name k|}}
+                <option value="{{k}}">{{localize name}}</option>
+                {{/each}}
+            </datalist>
+        {{else}}
         <input type="text" name="{{this.module}}.{{this.key}}" value="{{this.value}}" data-dtype="{{this.type}}"/>
+        {{/if}}
+
         {{/if}}
     </div>
 
