@@ -1,3 +1,7 @@
+# 0.5.3
+
+* Add functionality to Defined Structure Variable to have a list to choose from. Currently only have variables for 5e. Any non 5e system will still have to manually define the variable.
+
 # 0.5.2
 
 * Fix proper english check that was being replaced by double escape characters - @kageru
