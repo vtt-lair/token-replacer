@@ -146,6 +146,9 @@ class TokenReplacerSetup extends FormApplication {
 
         const isTRDebug = game.settings.get("token-replacer", "debug");
         if (isTRDebug) {
+            let folderNameFormat = tr_folderFormats[folderNameIdx].value;
+            let imageNameFormat = tr_nameFormats[imageNameIdx].value;
+
             if (folderNameFormat === "proper") {
                 folderNameFormat = " ";
             }
