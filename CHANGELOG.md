@@ -1,3 +1,7 @@
+# 0.5.5
+
+* Fix bug where the replace token dropdown setting wasn't being saved
+
 # 0.5.4
 
 * Fix debug logging issue when saving settings
