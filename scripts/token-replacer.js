@@ -103,6 +103,7 @@ class TokenReplacerSetup extends FormApplication {
     async _updateObject(event, formData) {
         event.preventDefault();
 
+        const replaceToken = formData['token-replacer.replaceToken'];
         const structure = formData['token-replacer.structure'];
         const tokenDir = formData['token-replacer.tokenDirectory'];
         let diffName = formData['token-replacer.difficultyName'];
@@ -136,6 +137,7 @@ class TokenReplacerSetup extends FormApplication {
             diffVariable = "";
         }
 
+        await game.settings.set("token-replacer", "replaceToken", replaceToken);
         await game.settings.set("token-replacer", "structure", structure);
         await game.settings.set("token-replacer", "tokenDirectory", tokenDir);
         await game.settings.set("token-replacer", "difficultyName", diffName);
