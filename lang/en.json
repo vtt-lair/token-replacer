@@ -48,6 +48,16 @@
     "TR.DefinedList.CR": "CR",
     "TR.DefinedList.Type": "Type",
     "TR.DefinedList.Alignment": "Alignment",
-    "TR.DefinedList.XP": "XP"
+    "TR.DefinedList.XP": "XP",
+    "TR.Tokenizer.Name": "Fallback to MrPrimate's Tokenizer",
+    "TR.Tokenizer.Hint": "If no image is found for a token, fallback to MrPrimate's Tokenizer. This will be a manual process, the Tokenizer screen will shown and you can set the portrait and token image of the actor.",
+    "TR.TokenizerPrompt.Name": "Prompt before showing Tokenizer",
+    "TR.TokenizerPrompt.Hint": "A prompt will show asking whether you want to use MrPrimate's Tokenizer. Leave this unticked to always show the Tokenizer screen if no token replacement image is found.",
+    "TR.Tabs.SystemSettings": "System Settings",
+    "TR.Tabs.Structure": "Structure",
+    "TR.Tabs.Formatting": "Formatting",
+    "TR.Tabs.Tokenizer": "Tokenizer",
+    "TR.Tokenizer.Question": "Use MrPrimate's Tokenizer? This will open the Tokenizer and will allow you to manually create a portrait and token image."
 }
+
 

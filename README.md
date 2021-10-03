@@ -49,6 +49,12 @@ The way the difficulty folder is formatted.
 * 'Underscored' uses underscores '_' between words.
 * 'Dashed' uses dashes '-' between words.
 
+### Tokenizer Tab
+#### Fallback to MrPrimate's Tokenizer
+If no image is found for a token, fallback to MrPrimate's Tokenizer. This will be a manual process, the Tokenizer screen will shown and you can set the portrait and token image of the actor.
+
+#### Prompt before showing Tokenizer
+A prompt will show asking whether you want to use MrPrimate's Tokenizer. Leave this unticked to always show the Tokenizer screen if no token replacement image is found.
 
 ## Disable Token Replacer for a Token
 On the actor, click on Prototype Token in the title bar. Select the Image tab, then at the bottom of the form there will be a checkbox where you can disable token replacer for the Prototype Token. If it's disabled this means the artwork will never automatically be replaced. The portrait or token art can still be manually set, however token replacer won't look for artwork going forward.

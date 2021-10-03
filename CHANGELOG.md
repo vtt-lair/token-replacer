@@ -1,3 +1,9 @@
+
+# 0.6.0
+
+* Fix bug where not entering a portrait prefix caused the token replacement to fail
+* Added functionality to use MrPrimate's Tokenizer module as a fallback if no replacement token image is found.
+
 # 0.5.5
 
 * Fix bug where the replace token dropdown setting wasn't being saved
