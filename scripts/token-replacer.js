@@ -74,7 +74,7 @@ class TokenReplacerSetup extends FormApplication {
                 {name: "system", i18nName: game.i18n.localize("TR.Tabs.SystemSettings"), class: "fas fa-cog", menus: [], settings: []},
                 {name: "structure", i18nName: game.i18n.localize("TR.Tabs.Structure"), class: "fas fa-folder-open", menus: [], settings: []},
                 {name: "format", i18nName: game.i18n.localize("TR.Tabs.Formatting"), class: "fas fa-list", menus: [], settings: []},
-                {name: "tokenizer", i18nName: game.i18n.localize("TR.Tabs.Tokenizer"), class: "fas fa-wolf-pack-battalion", menus: [], settings: []},
+                {name: "tokenizer", i18nName: game.i18n.localize("TR.Tabs.Tokenizer"), class: "fas fa-id-badge", menus: [], settings: []},
             ],
         };
 
@@ -643,7 +643,7 @@ const TokenReplacer = {
 
     async launchTokenizer(options, data) {
         return await new Promise((resolve) => { 
-            Tokenizer.launch(options, (response) => {
+            window.Tokenizer.launch(options, (response) => {
                 tokenReplacerCacheAvailableFiles();
                 data.img = response.avatarFilename;
                 data.token.img = response.tokenFilename;
