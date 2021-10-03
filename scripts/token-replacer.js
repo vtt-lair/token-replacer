@@ -314,6 +314,9 @@ const TokenReplacer = {
         tr_difficultyName = game.settings.get("token-replacer", "difficultyName");
         tr_difficultyVariable = game.settings.get("token-replacer", "difficultyVariable");
         tr_portraitPrefix = game.settings.get("token-replacer", "portraitPrefix");
+        if (!tr_portraitPrefix) {
+            tr_portraitPrefix = 'portrait_';
+        }
 
         let imageNameFormatIndex = game.settings.get("token-replacer", "imageNameFormat");    
         if (imageNameFormatIndex === null || imageNameFormatIndex === -1) {
