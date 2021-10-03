@@ -560,14 +560,28 @@ const TokenReplacer = {
         }
         
         if (!imageReplaced) {
-            await TokenReplacer.showTokenizer(data)
+            data = await TokenReplacer.showTokenizer(data, formattedName, folderStructure, tr_tokenDirectory.activeSource)
         }
 
         return data;
     },
 
-    async showTokenizer(actor) {
-        await Tokenizer.launch({}, null);
+    async showTokenizer(data, formattedName, folderStructure, activeSource) {
+        debugger;
+        const options = {
+            name: formattedName,
+            type: "npc",
+            avatarFilename: `${activeSource} ${data.token.img}`,
+            targetFolder: folderStructure,
+        }
+
+        const tokenizer = new Tokenizer();
+        await tokenizer.launch(options, (response) => {
+            data.img = response.avatarFilename;
+            data.token.img = response.tokenFilename;
+        });
+
+        return data;
     }
 }
 
