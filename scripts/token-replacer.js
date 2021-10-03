@@ -458,6 +458,7 @@ const TokenReplacer = {
                 const tokens = canvas.tokens.ownedTokens.slice().reverse();
                 const token = tokens.find((x) => x.data.actorId === actor.id);
                 token.update({"img": actor.data.token.img});
+                tr_usedTokenizer = false;
             }
 
             if (tr_isTRDebug) {
@@ -692,6 +693,9 @@ async function tokenReplacerCacheAvailableFiles() {
 		const tokens = await FilePicker.browse(tr_tokenDirectory.activeSource, folder);
 		tokens.files.forEach(t => tr_cachedTokens.push(t));
 	}
+
+    // don't have the Tokenizer .Avatar.webp files in the list as those are portraits
+    tr_cachedTokens = tr_cachedTokens.filter((x) => x.indexOf('.Avatar.webp') <= 0);
 }
 
 async function registerTokenReplacerSettings() {
