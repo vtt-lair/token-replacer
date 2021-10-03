@@ -56,7 +56,8 @@
     "TR.Tabs.SystemSettings": "System Settings",
     "TR.Tabs.Structure": "Structure",
     "TR.Tabs.Formatting": "Formatting",
-    "TR.Tabs.Tokenizer": "Tokenizer"
+    "TR.Tabs.Tokenizer": "Tokenizer",
+    "TR.Tokenizer.Question": "Use MrPrimate's Tokenizer? This will open the Tokenizer and will allow you to manually create a portrait and token image."
 }
 
 

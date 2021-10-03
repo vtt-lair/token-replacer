@@ -596,8 +596,8 @@ const TokenReplacer = {
     async promptTokenizer() {
         return await new Promise((resolve) => {
             new Dialog({
-                title: "Tokenizer",
-                content: 'Use MrPrimate\'s Tokenizer?',
+                title: `${game.i18n.localize('TR.Tabs.Tokenizer')}`,
+                content: `${game.i18n.localize('TR.Tokenizer.Question')}`,
                 buttons: {
                     yes: {
                         icon: '<i class="fas fa-check"></i>',
