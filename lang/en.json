@@ -48,6 +48,15 @@
     "TR.DefinedList.CR": "CR",
     "TR.DefinedList.Type": "Type",
     "TR.DefinedList.Alignment": "Alignment",
-    "TR.DefinedList.XP": "XP"
+    "TR.DefinedList.XP": "XP",
+    "TR.Tokenizer.Name": "Fallback to MrPrimate's Tokenizer",
+    "TR.Tokenizer.Hint": "If no image is found for a token, fallback to MrPrimate's Tokenizer. This will be a manual process, as the Tokenizer screen will show.",
+    "TR.TokenizerPrompt.Name": "Prompt before showing Tokenizer",
+    "TR.TokenizerPrompt.Hint": "A prompt will show asking whether you want to use MrPrimate's Tokenizer. Leave this untick to always show the Tokenizer screen on replacement failure.",
+    "TR.Tabs.SystemSettings": "System Settings",
+    "TR.Tabs.Structure": "Structure",
+    "TR.Tabs.Formatting": "Formatting",
+    "TR.Tabs.Tokenizer": "Tokenizer"
 }
+
 
