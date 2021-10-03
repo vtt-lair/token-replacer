@@ -468,7 +468,7 @@ const TokenReplacer = {
     },
 
     // replace the artwork for a NPC actor with the version from this module
-    replaceArtWork(data) {
+    async replaceArtWork(data) {
         if (tr_isTRDebug) {
             console.log(`Token Replacer: Replacing Artwork`);        
         }
@@ -539,6 +539,7 @@ const TokenReplacer = {
         }
 
         // we should replace the token art
+        let imageReplaced = false;
         if (
             (tr_replaceToken === 1 || tr_replaceToken === 3) &&
             (filteredCachedTokens && filteredCachedTokens.length > 0)        
@@ -552,9 +553,18 @@ const TokenReplacer = {
             }
 
             data.token.img = tokenSrc;
+            imageReplaced = true;
         }
         
+        if (!imageReplaced) {
+            await TokenReplacer.showTokenizer(data)
+        }
+
         return data;
+    },
+
+    async showTokenizer(actor) {
+        await Tokenizer.launch({}, null);
     }
 }
 
