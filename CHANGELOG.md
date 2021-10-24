@@ -1,4 +1,6 @@
-
+# 0.6.1
+* Change update code to use document#update instead for v9 compatibility
+* Wrap the MrPrimate Tokenizer call so that only GM can do it
 # 0.6.0
 
 * Fix bug where not entering a portrait prefix caused the token replacement to fail

@@ -483,8 +483,7 @@ const TokenReplacer = {
         }
 
         if (actor) {
-            const token = new Token(document, document._object.scene);
-            token.update({"img": actor.data.token.img});
+            document.update({"img": actor.data.token.img});
 
             if (tr_isTRDebug) {
                 console.log(`Token Replacer: createTokenHook: After: TokenData:`, document.data);
@@ -583,7 +582,8 @@ const TokenReplacer = {
                 imageReplaced = true;
             }
             
-            if (!imageReplaced && tr_integrateTokenizer && !tr_inTokenizer && isTokenHook) {
+            // if nothing was replace and tokenizer integration is enabled and you are the GM
+            if (!imageReplaced && tr_integrateTokenizer && !tr_inTokenizer && isTokenHook && game.user.isGM) {
                 tr_usedTokenizer = false;
                 data = TokenReplacer.showTokenizer(data, formattedName, folderStructure)
                 tr_inTokenizer = false;
