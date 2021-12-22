@@ -78,11 +78,17 @@ class TokenReplacerSetup extends FormApplication {
             ],
         };
 
+        let moduleField = 'namespace';
+        if (!game.version) {
+            moduleField = 'module';
+        }
+
         for (let [mapIterator, setting] of settings.filter(([mapIterator, setting]) => mapIterator.includes('token-replacer'))){
             const s = duplicate(setting);
             s.name = game.i18n.localize(s.name);
             s.hint = game.i18n.localize(s.hint);
-            s.value = game.settings.get(s.module, s.key);
+            s.value = game.settings.get(s[moduleField], s.key);
+            s.module = s[moduleField];
             s.type = setting.type instanceof Function ? setting.type.name : "String";
             s.isCheckbox = setting.type === Boolean;
             s.isSelect = s.choices !== undefined;
