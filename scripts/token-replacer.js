@@ -426,6 +426,11 @@ const TokenReplacer = {
 
     // handle preCreateToken hook
     async preCreateTokenHook(document, options, userId) {
+        // if you have Item Piles module, and this token is an item piles... then don't run the update
+        if (game.modules.get("item-piles")?.active && document.data.flags["item-piles"]?.data?.enabled) {
+            return;
+        }
+
         // if we disabled token replacer on this token, use the token that's there
         if (document.data.flags["token-replacer"] && document.data.flags["token-replacer"].disabled) {
             return;
@@ -463,7 +468,7 @@ const TokenReplacer = {
                 // we need to update the already created token
                 const tokens = canvas.tokens.ownedTokens.slice().reverse();
                 const token = tokens.find((x) => x.data.actorId === actor.id);
-                token.update({"img": actor.data.token.img});
+                token.document.update({"img": actor.data.token.img});
                 tr_usedTokenizer = false;
             }
 
@@ -476,6 +481,11 @@ const TokenReplacer = {
     },
 
     async createTokenHook(document, options, userId) {
+        // if you have Item Piles module, and this token is an item piles... then don't run the update
+        if (game.modules.get("item-piles")?.active && document.data.flags["item-piles"]?.data?.enabled) {
+            return;
+        }
+
         // if we disabled token replacer on this token, use the token that's there
         if (document.data.flags["token-replacer"] && document.data.flags["token-replacer"].disabled) {
             return;
@@ -686,22 +696,27 @@ async function tokenReplacerCacheAvailableFiles() {
     if (tr_isTRDebug) {
         console.log(`Token Replacer: Caching root folder: '${tr_tokenDirectory.activeSource}', '${tr_tokenDirectory.current}'`);
     }
-    // any files in the root (maybe they didn't want to use subfolders)    
-    const rootTokens = await FilePicker.browse(tr_tokenDirectory.activeSource, tr_tokenDirectory.current);
-    rootTokens.files.forEach(t => tr_cachedTokens.push(t));
+        
+    try {
+        // any files in the root (maybe they didn't want to use subfolders)
+        const rootTokens = await FilePicker.browse(tr_tokenDirectory.activeSource, tr_tokenDirectory.current);
+        rootTokens.files.forEach(t => tr_cachedTokens.push(t));
 
-    const folders = await FilePicker.browse(tr_tokenDirectory.activeSource, tr_tokenDirectory.current);
-    // any files in subfolders
-	for ( let folder of folders.dirs ) {
-        if (tr_isTRDebug) {
-            console.log(`Token Replacer: Caching folders: '${tr_tokenDirectory.activeSource}', '${folder}'`);
+        const folders = await FilePicker.browse(tr_tokenDirectory.activeSource, tr_tokenDirectory.current);
+        // any files in subfolders
+        for ( let folder of folders.dirs ) {
+            if (tr_isTRDebug) {
+                console.log(`Token Replacer: Caching folders: '${tr_tokenDirectory.activeSource}', '${folder}'`);
+            }
+            const tokens = await FilePicker.browse(tr_tokenDirectory.activeSource, folder);
+            tokens.files.forEach(t => tr_cachedTokens.push(t));
         }
-		const tokens = await FilePicker.browse(tr_tokenDirectory.activeSource, folder);
-		tokens.files.forEach(t => tr_cachedTokens.push(t));
-	}
 
-    // don't have the Tokenizer .Avatar.webp files in the list as those are portraits
-    tr_cachedTokens = tr_cachedTokens.filter((x) => x.indexOf('.Avatar.webp') <= 0);
+        // don't have the Tokenizer .Avatar.webp files in the list as those are portraits
+        tr_cachedTokens = tr_cachedTokens.filter((x) => x.indexOf('.Avatar.webp') <= 0);   
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 async function registerTokenReplacerSettings() {
