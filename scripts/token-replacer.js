@@ -299,7 +299,7 @@ const TokenReplacerDisabler = {
 
     onConfigRender: function(config, html) {
 		const disabled = TokenReplacerDisabler.getReplacerDisabled(config.token);
-		const imageTab = html.find('.tab[data-tab="image"]');
+		const imageTab = html.find('.tab[data-tab="appearance"]');
 
 		imageTab.append($(`
 			<fieldset class="token-replacer">
