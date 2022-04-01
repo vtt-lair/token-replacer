@@ -4,6 +4,7 @@ const tr_difficultyVariableDefault = "data.details.cr";
 const tr_portraitPrefixDefault = "";
 const tr_useStructureDefault = 1;
 const tr_BAD_DIRS = ["[data]", "[data] ", "", null];
+const tr_npc_types = ["monster", "npc"];
 
 let tr_cachedTokens = [];
 let tr_replaceToken;
@@ -390,7 +391,7 @@ const TokenReplacer = {
             hasDifficultProperty = true;
         }
 
-        if ( !tr_replaceToken || (document.type !== "npc") || !hasDifficultProperty ) return;
+        if ( !tr_replaceToken || !tr_npc_types.includes(document.type) || !hasDifficultProperty ) return;
         await TokenReplacer.replaceArtWork(document);
         document.update({
             "img": document.data.img,
@@ -416,7 +417,7 @@ const TokenReplacer = {
             hasDifficultProperty = true;
         }
 
-        if ( !tr_replaceToken || (document.data.type !== "npc") || !hasDifficultProperty ) return;
+        if ( !tr_replaceToken || !tr_npc_types.includes(document.data.type) || !hasDifficultProperty ) return;
         await TokenReplacer.replaceArtWork(document.data);
         document.update({
             "img": document.data.img,
@@ -457,7 +458,7 @@ const TokenReplacer = {
                 hasDifficultProperty = true;
             }
 
-            if ( !tr_replaceToken || (actor.data.type !== "npc") || !hasDifficultProperty ) return;
+            if ( !tr_replaceToken || !tr_npc_types.includes(actor.data.type) || !hasDifficultProperty ) return;
             await TokenReplacer.replaceArtWork(actor.data, true);
             actor.update({
                 "img": actor.data.img,
