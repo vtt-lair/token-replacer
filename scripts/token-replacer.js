@@ -4,7 +4,7 @@ const tr_difficultyVariableDefault = "data.details.cr";
 const tr_portraitPrefixDefault = "";
 const tr_useStructureDefault = 1;
 const tr_BAD_DIRS = ["[data]", "[data] ", "", null];
-const tr_npc_types = ["monster", "npc"];
+const tr_npc_types = ["Monster", "monster", "npc"];
 
 let tr_cachedTokens = [];
 let tr_replaceToken;
