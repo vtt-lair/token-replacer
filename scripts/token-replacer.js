@@ -391,11 +391,12 @@ const TokenReplacer = {
             hasDifficultProperty = true;
         }
 
-        if ( !tr_replaceToken || !tr_npc_types.includes(document.type) || !hasDifficultProperty ) return;
+        if ( !tr_replaceToken || !tr_npc_types.includes(document.type.toLowerCase()) || !hasDifficultProperty ) return;
         await TokenReplacer.replaceArtWork(document);
         document.update({
             "img": document.data.img,
             "token.img": document.data.token.img,
+            "token.scale": TokenReplacer.calculateScale(actor.data.token.img),
         });    
     },
 
@@ -417,11 +418,12 @@ const TokenReplacer = {
             hasDifficultProperty = true;
         }
 
-        if ( !tr_replaceToken || !tr_npc_types.includes(document.data.type) || !hasDifficultProperty ) return;
+        if ( !tr_replaceToken || !tr_npc_types.includes(document.data.type.toLowerCase()) || !hasDifficultProperty ) return;
         await TokenReplacer.replaceArtWork(document.data);
         document.update({
             "img": document.data.img,
             "token.img": document.data.token.img,
+            "token.scale": TokenReplacer.calculateScale(actor.data.token.img),
         });
     },
 
@@ -458,11 +460,12 @@ const TokenReplacer = {
                 hasDifficultProperty = true;
             }
 
-            if ( !tr_replaceToken || !tr_npc_types.includes(actor.data.type) || !hasDifficultProperty ) return;
+            if ( !tr_replaceToken || !tr_npc_types.includes(actor.data.type.toLowerCase()) || !hasDifficultProperty ) return;
             await TokenReplacer.replaceArtWork(actor.data, true);
             actor.update({
                 "img": actor.data.img,
                 "token.img": actor.data.token.img,
+                "token.scale": TokenReplacer.calculateScale(actor.data.token.img),
             });
 
             if (tr_usedTokenizer) {
@@ -669,6 +672,22 @@ const TokenReplacer = {
                 resolve(data);
             })
         });
+    },
+
+    calculateScale(imageName) {
+        let scale = 1;
+        let pos = imageName.toLowerCase().indexOf("scale");
+
+        if (pos >= 0) {
+            scale = imageName.toLowerCase().substr(pos + "scale".length, 3);
+            scale = +scale / 100;
+
+            if (isNaN(scale)) {
+                scale = 1;
+            }
+        }
+
+        return scale;
     }
 }
 
