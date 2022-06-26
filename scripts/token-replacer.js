@@ -1,6 +1,7 @@
 const tr_tokenPathDefault = "modules/token-replacer/tokens/";
 const tr_difficultyNameDefault = "cr";
 const tr_difficultyVariableDefault = "data.details.cr";
+const tr_scaleVariableDefault = "scale";
 const tr_portraitPrefixDefault = "";
 const tr_useStructureDefault = 1;
 const tr_BAD_DIRS = ["[data]", "[data] ", "", null];
@@ -12,6 +13,7 @@ let tr_tokenDirectory;
 let tr_difficultyName;
 let tr_difficultyVariable;
 let tr_portraitPrefix;
+let tr_scaleName;
 let tr_hookedFromTokenCreation = false;
 let tr_imageNameFormat;
 let tr_isTRDebug = false;
@@ -123,6 +125,7 @@ class TokenReplacerSetup extends FormApplication {
         const prefix = formData['token-replacer.portraitPrefix'];
         const integrateTokenizer = formData['token-replacer.integrateTokenizer'];
         const promptTokenizer = formData['token-replacer.promptTokenizer'];
+        const scaleName = formData['token-replacer.scaleName'];
 
         // can’t be const because it’s overwritten for debug logging
         const imageNameIdx = formData['token-replacer.imageNameFormat'];
@@ -161,6 +164,7 @@ class TokenReplacerSetup extends FormApplication {
         await game.settings.set("token-replacer", "folderNameFormat", folderNameIdx);
         await game.settings.set("token-replacer", "integrateTokenizer", integrateTokenizer);
         await game.settings.set("token-replacer", "promptTokenizer", promptTokenizer);
+        await game.settings.set("token-replacer", "scaleName", scaleName);
 
         const isTRDebug = game.settings.get("token-replacer", "debug");
         if (isTRDebug) {
@@ -330,6 +334,7 @@ const TokenReplacer = {
         tr_difficultyName = game.settings.get("token-replacer", "difficultyName");
         tr_difficultyVariable = game.settings.get("token-replacer", "difficultyVariable");
         tr_portraitPrefix = game.settings.get("token-replacer", "portraitPrefix");
+        tr_scaleName = game.settings.get("token-replacer", "scaleName");
         if (!tr_portraitPrefix) {
             tr_portraitPrefix = 'portrait_';
         }
@@ -360,7 +365,7 @@ const TokenReplacer = {
         tr_integrateTokenizer = game.settings.get("token-replacer", "integrateTokenizer");
         if (tr_integrateTokenizer) {
             tr_promptTokenizer = game.settings.get("token-replacer", "promptTokenizer");        
-        }        
+        }
 
         tr_isTRDebug = game.settings.get("token-replacer", "debug");
     },
@@ -391,11 +396,12 @@ const TokenReplacer = {
             hasDifficultProperty = true;
         }
 
-        if ( !tr_replaceToken || !tr_npc_types.includes(document.type) || !hasDifficultProperty ) return;
+        if ( !tr_replaceToken || !tr_npc_types.includes(document.type.toLowerCase()) || !hasDifficultProperty ) return;
         await TokenReplacer.replaceArtWork(document);
         document.update({
             "img": document.data.img,
             "token.img": document.data.token.img,
+            "token.scale": TokenReplacer.calculateScale(document.data.token.img),
         });    
     },
 
@@ -417,11 +423,12 @@ const TokenReplacer = {
             hasDifficultProperty = true;
         }
 
-        if ( !tr_replaceToken || !tr_npc_types.includes(document.data.type) || !hasDifficultProperty ) return;
+        if ( !tr_replaceToken || !tr_npc_types.includes(document.data.type.toLowerCase()) || !hasDifficultProperty ) return;
         await TokenReplacer.replaceArtWork(document.data);
         document.update({
             "img": document.data.img,
             "token.img": document.data.token.img,
+            "token.scale": TokenReplacer.calculateScale(document.data.token.img),
         });
     },
 
@@ -458,11 +465,12 @@ const TokenReplacer = {
                 hasDifficultProperty = true;
             }
 
-            if ( !tr_replaceToken || !tr_npc_types.includes(actor.data.type) || !hasDifficultProperty ) return;
+            if ( !tr_replaceToken || !tr_npc_types.includes(actor.data.type.toLowerCase()) || !hasDifficultProperty ) return;
             await TokenReplacer.replaceArtWork(actor.data, true);
             actor.update({
                 "img": actor.data.img,
                 "token.img": actor.data.token.img,
+                "token.scale": TokenReplacer.calculateScale(actor.data.token.img),
             });
 
             if (tr_usedTokenizer) {
@@ -669,6 +677,22 @@ const TokenReplacer = {
                 resolve(data);
             })
         });
+    },
+
+    calculateScale(imageName) {
+        let scale = 1;
+        let pos = imageName.toLowerCase().indexOf(tr_scaleName.toLowerCase());
+
+        if (pos >= 0) {
+            scale = imageName.toLowerCase().substr(pos + tr_scaleName.toLowerCase().length, 3);
+            scale = +scale / 100;
+
+            if (isNaN(scale)) {
+                scale = 1;
+            }
+        }
+
+        return scale;
     }
 }
 
@@ -843,6 +867,16 @@ async function registerTokenReplacerSettings() {
             3: game.i18n.localize("TR.FolderNameFormat.Choices.Dashed"),            
         },
         default: 0,
+    });
+
+    game.settings.register("token-replacer", "scaleName", {
+        name: game.i18n.localize("TR.ScaleName.Name"),
+        hint: game.i18n.localize("TR.ScaleName.Hint"),
+        scope: "world",
+        group: "format",
+        config: false,
+        type: String,
+        default: tr_scaleVariableDefault,
     });
 
     game.settings.register("token-replacer", "integrateTokenizer", {

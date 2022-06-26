@@ -57,7 +57,9 @@
     "TR.Tabs.Structure": "Structure",
     "TR.Tabs.Formatting": "Formatting",
     "TR.Tabs.Tokenizer": "Tokenizer",
-    "TR.Tokenizer.Question": "Use MrPrimate's Tokenizer? This will open the Tokenizer and will allow you to manually create a portrait and token image."
+    "TR.Tokenizer.Question": "Use MrPrimate's Tokenizer? This will open the Tokenizer and will allow you to manually create a portrait and token image.",
+    "TR.ScaleName.Name": "Scale Name",
+    "TR.ScaleName.Hint": "The wording in the image name that determines the scale the token should be set to. If the file name is 'Pit_Fiend_Large_Scale200', then you would set the variable to 'scale' and the token will be scaled to be 200%."
 }
 
 
