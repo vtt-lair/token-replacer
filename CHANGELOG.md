@@ -1,4 +1,10 @@
 
+# 0.6.5
+
+* Changed NPC checking to rather not be case sensitive.
+* Add a way to handle scale tokens using information from the file name.
+* Removed the free tokens, as it's just increasing the module size.
+
 # 0.6.4
 
 * Add way to handle different NPC types for systems that doesn't use "npc" as a type specifyer. - thanks @tuirgin

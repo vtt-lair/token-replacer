@@ -49,6 +49,9 @@ The way the difficulty folder is formatted.
 * 'Underscored' uses underscores '_' between words.
 * 'Dashed' uses dashes '-' between words.
 
+#### Scale Name
+The wording in the image name that determines the scale the token should be set to. If the file name is 'Pit_Fiend_Large_Scale200', then you would set the variable to 'scale' and the token will be scaled to be 200%.
+
 ### Tokenizer Tab
 #### Fallback to MrPrimate's Tokenizer
 If no image is found for a token, fallback to MrPrimate's Tokenizer. This will be a manual process, the Tokenizer screen will shown and you can set the portrait and token image of the actor.
