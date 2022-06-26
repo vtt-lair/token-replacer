@@ -1,13 +1,17 @@
 
+# 0.6.4
+
+* Add way to handle different NPC types for systems that doesn't use "npc" as a type specifyer. - thanks @tuirgin
+
 # 0.6.3
 
-* fix module to not try to replace Item Piles with token artwork
-* fixed an issue where the token wasn't updating when using MrPrimate's Tokenizer
-* fixed issue where disabling token replacer for a specific token via the token config screen, wasn't showing this setting
+* Fix module to not try to replace Item Piles with token artwork
+* Fixed an issue where the token wasn't updating when using MrPrimate's Tokenizer
+* Fixed issue where disabling token replacer for a specific token via the token config screen, wasn't showing this setting
 
 # 0.6.2
 
-* fix settings to work with v9
+* Fix settings to work with v9
 
 # 0.6.1
 
