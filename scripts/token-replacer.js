@@ -1,6 +1,6 @@
 const tr_tokenPathDefault = "modules/token-replacer/tokens/";
 const tr_difficultyNameDefault = "cr";
-const tr_difficultyVariableDefault = "data.details.cr";
+const tr_difficultyVariableDefault = "details.cr";
 const tr_scaleVariableDefault = "scale";
 const tr_portraitPrefixDefault = "";
 const tr_useStructureDefault = 1;
@@ -109,7 +109,7 @@ class TokenReplacerSetup extends FormApplication {
         }
 
         return {
-            user : game.user, systemTitle : game.system.data.title, data
+            user : game.user, systemTitle : game.system.title, data
         }
     }
   
@@ -207,36 +207,43 @@ class DirectoryPicker extends FilePicker {
         const activeSource = this.activeSource;
         const bucket = event.target.bucket ? event.target.bucket.value : null;
         this.field.value = DirectoryPicker.format({
-        activeSource,
-        bucket,
-        path,
+            activeSource,
+            bucket,
+            path,
         });
         this.close();
     }
   
     static async uploadToPath(path, file) {
         const options = DirectoryPicker.parse(path);
-        return FilePicker.upload(options.activeSource, options.current, file, { bucket: options.bucket });
+        // v9 allows silent uploads
+        if (game.version) {
+            return FilePicker.upload(options.activeSource, options.current, file, { bucket: options.bucket }, { notify: false });
+        } else {
+            return FilePicker.upload(options.activeSource, options.current, file, { bucket: options.bucket });
+        }
     }
   
     // returns the type "Directory" for rendering the SettingsConfig
     static Directory(val) {
-        return val;
+        return val === null ? '' : String(val);
     }
   
     // formats the data into a string for saving it as a GameSetting
     static format(value) {
         return value.bucket !== null
-        ? `[${value.activeSource}:${value.bucket}] ${value.path}`
-        : `[${value.activeSource}] ${value.path}`;
+            ? `[${value.activeSource}:${value.bucket}] ${value.path}`
+            : `[${value.activeSource}] ${value.path}`;
     }
   
     // parses the string back to something the FilePicker can understand as an option
-    static parse(str) {
-        let matches = str.match(/\[(.+)\]\s*(.+)/);
+    static parse(inStr) {
+        const str = inStr ?? '';
+        let matches = str.match(/\[(.+)\]\s*(.+)?/u);
+
         if (matches) {
-        let source = matches[1];
-        const current = matches[2].trim();
+        let [, source, current = ''] = matches;
+        current = current.trim();
         const [s3, bucket] = source.split(":");
         if (bucket !== undefined) {
             return {
@@ -254,9 +261,9 @@ class DirectoryPicker extends FilePicker {
         }
         // failsave, try it at least
         return {
-        activeSource: "data",
-        bucket: null,
-        current: str,
+            activeSource: "data",
+            bucket: null,
+            current: str,
         };
     }
   
@@ -266,7 +273,7 @@ class DirectoryPicker extends FilePicker {
         .find(`input[data-dtype="Directory"]`)
         .each((index, element) => {
             // disable the input field raw editing
-            $(element).prop("readonly", true);
+            // $(element).prop("readonly", true);
 
             // if there is no button next to this input element yet, we add it
             if (!$(element).next().length) {
@@ -332,7 +339,16 @@ const TokenReplacer = {
             tr_tokenDirectory = DirectoryPicker.parse(game.settings.get("token-replacer", "tokenDirectory"))
         }    
         tr_difficultyName = game.settings.get("token-replacer", "difficultyName");
-        tr_difficultyVariable = game.settings.get("token-replacer", "difficultyVariable");
+        if (game.version.substr(0, 2) == '10') {
+            tr_difficultyVariable = game.settings.get("token-replacer", "difficultyVariable");
+
+            if (tr_difficultyVariable.startsWith('data.')) {
+                tr_difficultyVariable = tr_difficultyVariable.replace('data.', '');
+            }
+
+        } else {
+            tr_difficultyVariable = game.settings.get("token-replacer", "difficultyVariable");
+        }        
         tr_portraitPrefix = game.settings.get("token-replacer", "portraitPrefix");
         tr_scaleName = game.settings.get("token-replacer", "scaleName");
         if (!tr_portraitPrefix) {
@@ -399,9 +415,10 @@ const TokenReplacer = {
         if ( !tr_replaceToken || !tr_npc_types.includes(document.type.toLowerCase()) || !hasDifficultProperty ) return;
         await TokenReplacer.replaceArtWork(document);
         document.update({
-            "img": document.data.img,
-            "token.img": document.data.token.img,
-            "token.scale": TokenReplacer.calculateScale(document.data.token.img),
+            "img": document.img,
+            "prototypeToken.texture.src": document.prototypeToken.texture.src,
+            "prototypeToken.texture.scaleX": TokenReplacer.calculateScale(document.prototypeToken.texture.src),
+            "prototypeToken.texture.scaleY": TokenReplacer.calculateScale(document.prototypeToken.texture.src),
         });    
     },
 
@@ -415,7 +432,7 @@ const TokenReplacer = {
             console.log(`Token Replacer: createActorHook: Data:`, document);        
         }
 
-        let hasDifficultProperty = hasProperty(document.data, tr_difficultyVariable);
+        let hasDifficultProperty = hasProperty(document.system, tr_difficultyVariable);
         // Disabling the folder structure hides the relevant input fields but doesn’t actually clear tr_difficultyVariable,
         // so users would have to empty the text field before disabling folder structure if we don’t check for it here:
         if (!tr_difficultyVariable || (tr_useStructure === 0 || tr_useStructure === 2)) {
@@ -423,95 +440,97 @@ const TokenReplacer = {
             hasDifficultProperty = true;
         }
 
-        if ( !tr_replaceToken || !tr_npc_types.includes(document.data.type.toLowerCase()) || !hasDifficultProperty ) return;
-        await TokenReplacer.replaceArtWork(document.data);
+        if ( !tr_replaceToken || !tr_npc_types.includes(document.type.toLowerCase()) || !hasDifficultProperty ) return;
+        await TokenReplacer.replaceArtWork(document);
         document.update({
-            "img": document.data.img,
-            "token.img": document.data.token.img,
-            "token.scale": TokenReplacer.calculateScale(document.data.token.img),
+            "img": document.img,
+            "prototypeToken.texture.src": document.prototypeToken.texture.src,
+            "prototypeToken.texture.scaleX": TokenReplacer.calculateScale(document.prototypeToken.texture.src),
+            "prototypeToken.texture.scaleY": TokenReplacer.calculateScale(document.prototypeToken.texture.src),
         });
     },
 
     // handle preCreateToken hook
     async preCreateTokenHook(document, options, userId) {
         // if you have Item Piles module, and this token is an item piles... then don't run the update
-        if (game.modules.get("item-piles")?.active && document.data.flags["item-piles"]?.data?.enabled) {
+        if (game.modules.get("item-piles")?.active && document.flags["item-piles"]?.enabled) {
             return;
         }
 
         // if we disabled token replacer on this token, use the token that's there
-        if (document.data.flags["token-replacer"] && document.data.flags["token-replacer"].disabled) {
+        if (document.flags["token-replacer"] && document.flags["token-replacer"].disabled) {
             return;
         }
 
         // grab the saved values
         TokenReplacer.grabSavedSettings();
-        const actor = game.actors.get(document.data.actorId);    
+        const actor = game.actors.get(document.actorId);    
 
         if (tr_isTRDebug) {
-            console.log(`Token Replacer: preCreateTokenHook: Before: TokenData:`, document.data);
+            console.log(`Token Replacer: preCreateTokenHook: Before: TokenData:`, document);
             console.log(`Token Replacer: preCreateTokenHook: Before: Actor:`, actor);        
         }
 
         if (actor) {
             if (tr_isTRDebug) {
-                console.log(`Token Replacer: preCreateTokenHook: Before: PassData:`, actor.data);
+                console.log(`Token Replacer: preCreateTokenHook: Before: PassData:`, actor);
             }
             tr_hookedFromTokenCreation = true;
 
-            let hasDifficultProperty = hasProperty(actor.data, tr_difficultyVariable);
+            let hasDifficultProperty = hasProperty(actor.system, tr_difficultyVariable);
             if (!tr_difficultyVariable) {
                 // overwrite since it's empty
                 hasDifficultProperty = true;
             }
 
-            if ( !tr_replaceToken || !tr_npc_types.includes(actor.data.type.toLowerCase()) || !hasDifficultProperty ) return;
-            await TokenReplacer.replaceArtWork(actor.data, true);
+            if ( !tr_replaceToken || !tr_npc_types.includes(actor.type.toLowerCase()) || !hasDifficultProperty ) return;
+            await TokenReplacer.replaceArtWork(actor, true);
             actor.update({
-                "img": actor.data.img,
-                "token.img": actor.data.token.img,
-                "token.scale": TokenReplacer.calculateScale(actor.data.token.img),
+                "img": actor.img,
+                "prototypeToken.texture.src": actor.prototypeToken.texture.src,
+                "prototypeToken.texture.scaleX": TokenReplacer.calculateScale(actor.prototypeToken.texture.src),
+                "prototypeToken.texture.scaleY": TokenReplacer.calculateScale(actor.prototypeToken.texture.src),
             });
 
             if (tr_usedTokenizer) {
                 // we need to update the already created token
                 const tokens = canvas.tokens.ownedTokens.slice().reverse();
-                const token = tokens.find((x) => x.data.actorId === actor.id);
-                token.document.update({"img": actor.data.token.img});
+                const token = tokens.find((x) => x.document.actorId === actor.id);
+                token.document.update({"texture.src": actor.prototypeToken.texture.src});
                 tr_usedTokenizer = false;
             }
 
             if (tr_isTRDebug) {
-                console.log(`Token Replacer: preCreateTokenHook: After: TokenData:`, document.data);
+                console.log(`Token Replacer: preCreateTokenHook: After: TokenData:`, document);
                 console.log(`Token Replacer: preCreateTokenHook: After: Actor:`, actor);
-                console.log(`Token Replacer: preCreateTokenHook: After: PassData:`, actor.data);
+                console.log(`Token Replacer: preCreateTokenHook: After: PassData:`, actor);
             }
         }        
     },
 
     async createTokenHook(document, options, userId) {
         // if you have Item Piles module, and this token is an item piles... then don't run the update
-        if (game.modules.get("item-piles")?.active && document.data.flags["item-piles"]?.data?.enabled) {
+        if (game.modules.get("item-piles")?.active && document.flags["item-piles"]?.enabled) {
             return;
         }
 
         // if we disabled token replacer on this token, use the token that's there
-        if (document.data.flags["token-replacer"] && document.data.flags["token-replacer"].disabled) {
+        if (document.flags["token-replacer"] && document.flags["token-replacer"].disabled) {
             return;
         }
 
-        const actor = game.actors.get(document.data.actorId);
+        const actor = game.actors.get(document.actorId);
 
         if (tr_isTRDebug) {
-            console.log(`Token Replacer: createTokenHook: Before: TokenData:`, document.data);
+            console.log(`Token Replacer: createTokenHook: Before: TokenData:`, document);
             console.log(`Token Replacer: createTokenHook: Before: Actor:`, actor);        
         }
 
         if (actor) {
-            document.update({"img": actor.data.token.img});
+            document.update({"texture.src": actor.prototypeToken.texture.src});
 
             if (tr_isTRDebug) {
-                console.log(`Token Replacer: createTokenHook: After: TokenData:`, document.data);
+                console.log(`Token Replacer: createTokenHook: After: TokenData:`, document);
                 console.log(`Token Replacer: createTokenHook: After: Actor:`, actor);        
             }
         }
@@ -525,7 +544,7 @@ const TokenReplacer = {
             }
     
             const formattedName = data.name.trim().replace(/ /g, tr_imageNameFormat);
-            const diffDir = (tr_difficultyName) ? `${String(getProperty(data, tr_difficultyVariable)).replace(".", "_")}/` : "";
+            const diffDir = (tr_difficultyName) ? `${String(getProperty(data.system, tr_difficultyVariable)).replace(".", "_")}/` : "";
             let folderStructure = `${tr_tokenDirectory.current}/${tr_difficultyName}${folderNameFormat}${diffDir}`;
     
             if (tr_useStructure === 0) {
@@ -569,7 +588,7 @@ const TokenReplacer = {
                 console.log(`Token Replacer: Found these portraits: ${filteredCachedPortraits}`);
             }
     
-            data.token = data.token || {};
+            data.prototypeToken = data.prototypeToken || {};
     
             // if we should replace the portrait art and the call is not from PreCreateToken.
             // we only change the art if the art is still the default mystery man
@@ -600,10 +619,10 @@ const TokenReplacer = {
                 const tokenSrc = filteredCachedTokens[randomIdx];
     
                 if (tr_isTRDebug) {
-                    console.log(`Token Replacer: Replacing token art. From: '${data.token.img}', To: '${tokenSrc}'`);
+                    console.log(`Token Replacer: Replacing token art. From: '${data.prototypeToken.texture.src}', To: '${tokenSrc}'`);
                 }
     
-                data.token.img = tokenSrc;
+                data.prototypeToken.texture.src = tokenSrc;
                 imageReplaced = true;
             }
             
@@ -649,7 +668,7 @@ const TokenReplacer = {
             name: formattedName,
             type: "npc",
             avatarFilename: data.img,
-            tokenFilename: data.token.img,
+            tokenFilename: data.prototypeToken.texture.src,
             targetFolder: folderStructure,
         }
 
@@ -671,7 +690,7 @@ const TokenReplacer = {
             window.Tokenizer.launch(options, (response) => {
                 tokenReplacerCacheAvailableFiles();
                 data.img = response.avatarFilename;
-                data.token.img = response.tokenFilename;
+                data.prototypeToken.texture.src = response.tokenFilename;
                 tr_usedTokenizer = true;
 
                 resolve(data);
