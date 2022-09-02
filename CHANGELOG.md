@@ -1,3 +1,6 @@
+# 0.7.0
+
+* Version 10 compatibility 
 
 # 0.6.5
 
