@@ -576,9 +576,9 @@ const TokenReplacer = {
                 console.log(`Token Replacer: searching for portrait for ${portraitCheck}`);
             }
     
-            let filteredCachedTokens = tr_cachedTokens.filter(t => t.toLowerCase().indexOf(tokenCheck) >= 0);
-            filteredCachedTokens = filteredCachedTokens.filter(t => t.toLowerCase().indexOf(tr_portraitPrefix) === -1);
-            let filteredCachedPortraits = tr_cachedTokens.filter(t => t.toLowerCase().indexOf(portraitCheck) >= 0);
+            let filteredCachedTokens = tr_cachedTokens.filter(t => escape(decodeURI(t)).toLowerCase().indexOf(tokenCheck) >= 0);
+            filteredCachedTokens = filteredCachedTokens.filter(t => escape(decodeURI(t)).toLowerCase().indexOf(tr_portraitPrefix) === -1);
+            let filteredCachedPortraits = tr_cachedTokens.filter(t => escape(decodeURI(t)).toLowerCase().indexOf(portraitCheck) >= 0);
             filteredCachedPortraits = (filteredCachedPortraits) ?? filteredCachedTokens;
             if (!filteredCachedPortraits.length) {
                 filteredCachedPortraits = filteredCachedTokens;
