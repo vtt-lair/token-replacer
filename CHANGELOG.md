@@ -1,3 +1,10 @@
+# 0.7.1
+
+* Fix issues with encoded url's
+
+# 0.7.0
+
+* Update to v10
 
 # 0.6.5
 
