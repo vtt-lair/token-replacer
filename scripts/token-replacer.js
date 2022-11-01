@@ -398,6 +398,10 @@ const TokenReplacer = {
 
     // handle preCreateActor hook
     async preCreateActorHook(document, options, userId) {
+        if (!game.user.isGM) {
+            return;
+        }
+
         // grab the saved values
         TokenReplacer.grabSavedSettings();
         tr_hookedFromTokenCreation = false;
@@ -424,6 +428,10 @@ const TokenReplacer = {
 
     // handle createActor hook
     async createActorHook(document, options, userId) {
+        if (!game.user.isGM) {
+            return;
+        }
+
         // grab the saved values
         TokenReplacer.grabSavedSettings();
         tr_hookedFromTokenCreation = false;
@@ -452,6 +460,10 @@ const TokenReplacer = {
 
     // handle preCreateToken hook
     async preCreateTokenHook(document, options, userId) {
+        if (!game.user.isGM) {
+            return;
+        }
+
         // if you have Item Piles module, and this token is an item piles... then don't run the update
         if (game.modules.get("item-piles")?.active && document.flags["item-piles"]?.enabled) {
             return;
@@ -509,6 +521,10 @@ const TokenReplacer = {
     },
 
     async createTokenHook(document, options, userId) {
+        if (!game.user.isGM) {
+            return;
+        }
+
         // if you have Item Piles module, and this token is an item piles... then don't run the update
         if (game.modules.get("item-piles")?.active && document.flags["item-piles"]?.enabled) {
             return;
