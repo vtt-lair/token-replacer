@@ -460,10 +460,6 @@ const TokenReplacer = {
 
     // handle preCreateToken hook
     async preCreateTokenHook(document, options, userId) {
-        if (!game.user.isGM) {
-            return;
-        }
-
         // if you have Item Piles module, and this token is an item piles... then don't run the update
         if (game.modules.get("item-piles")?.active && document.flags["item-piles"]?.enabled) {
             return;
@@ -476,7 +472,11 @@ const TokenReplacer = {
 
         // grab the saved values
         TokenReplacer.grabSavedSettings();
-        const actor = game.actors.get(document.actorId);    
+        const actor = game.actors.get(document.actorId);
+
+        if (!game.user.isGM && !actor.canUserModify(game.user, "update")) {
+            return;
+        }
 
         if (tr_isTRDebug) {
             console.log(`Token Replacer: preCreateTokenHook: Before: TokenData:`, document);
@@ -521,10 +521,6 @@ const TokenReplacer = {
     },
 
     async createTokenHook(document, options, userId) {
-        if (!game.user.isGM) {
-            return;
-        }
-
         // if you have Item Piles module, and this token is an item piles... then don't run the update
         if (game.modules.get("item-piles")?.active && document.flags["item-piles"]?.enabled) {
             return;
@@ -536,6 +532,10 @@ const TokenReplacer = {
         }
 
         const actor = game.actors.get(document.actorId);
+
+        if (!game.user.isGM && !actor.canUserModify(game.user, "update")) {
+            return;
+        }
 
         if (tr_isTRDebug) {
             console.log(`Token Replacer: createTokenHook: Before: TokenData:`, document);
