@@ -474,7 +474,7 @@ const TokenReplacer = {
         TokenReplacer.grabSavedSettings();
         const actor = game.actors.get(document.actorId);
 
-        if (!game.user.isGM && !actor.canUserModify(game.user, "update")) {
+        if (!actor.canUserModify(game.user, "update")) {
             return;
         }
 
@@ -533,7 +533,7 @@ const TokenReplacer = {
 
         const actor = game.actors.get(document.actorId);
 
-        if (!game.user.isGM && !actor.canUserModify(game.user, "update")) {
+        if (!actor.canUserModify(game.user, "update")) {
             return;
         }
 
