@@ -34,7 +34,7 @@
           "type": "module",
           "manifest": "https://github.com/MrPrimate/tokenizer/releases/download/latest/module.json",
           "compatibility": {
-            "verified": "3.9.5"
+            "verified": "4.1.4"
           }
         }]
     },
