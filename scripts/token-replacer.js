@@ -610,7 +610,7 @@ const TokenReplacer = {
             // we only change the art if the art is still the default mystery man
             // otherwise the portrait art will change every time we put a token on the scene
             if (
-                (tr_replaceToken === 2 || tr_replaceToken === 3) &&
+                (tr_replaceToken == 2 || tr_replaceToken == 3) &&
                 (filteredCachedPortraits && filteredCachedPortraits.length > 0)
             ) {
                 let randomIdx = Math.floor(Math.random() * (filteredCachedPortraits.length * filteredCachedPortraits.length));
@@ -627,7 +627,7 @@ const TokenReplacer = {
             // we should replace the token art
             let imageReplaced = false;
             if (
-                (tr_replaceToken === 1 || tr_replaceToken === 3) &&
+                (tr_replaceToken == 1 || tr_replaceToken == 3) &&
                 (filteredCachedTokens && filteredCachedTokens.length > 0)        
             ) {
                 let randomIdx = Math.floor(Math.random() * (filteredCachedTokens.length * filteredCachedTokens.length));
