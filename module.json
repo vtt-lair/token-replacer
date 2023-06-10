@@ -44,6 +44,6 @@
     "changelog": "https://github.com/vtt-lair/token-replacer/blob/main/CHANGELOG.md",
     "compatibility": {
         "minimum": "10",
-        "verified": "10"
+        "verified": "11"
     }
 }
