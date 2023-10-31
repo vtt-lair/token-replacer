@@ -339,7 +339,7 @@ const TokenReplacer = {
             tr_tokenDirectory = DirectoryPicker.parse(game.settings.get("token-replacer", "tokenDirectory"))
         }    
         tr_difficultyName = game.settings.get("token-replacer", "difficultyName");
-        if (game.version.substr(0, 2) == '10') {
+        if (game.version.substr(0, 2) == '10' || game.version.substr(0, 2) == '11') {
             tr_difficultyVariable = game.settings.get("token-replacer", "difficultyVariable");
 
             if (tr_difficultyVariable.startsWith('data.')) {
