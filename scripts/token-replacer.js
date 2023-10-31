@@ -998,10 +998,10 @@ function createDefinedVariableList() {
         case 'dnd5e':
         case 'sw5e':
             tr_definedVariableList = {
-                'data.details.cr': 'TR.DefinedList.CR',
-                'data.details.type.value': 'TR.DefinedList.Type',
-                'data.details.alignment': 'TR.DefinedList.Alignment',
-                'data.details.xp.value': 'TR.DefinedList.XP',
+                'details.cr': 'TR.DefinedList.CR',
+                'details.type.value': 'TR.DefinedList.Type',
+                'details.alignment': 'TR.DefinedList.Alignment',
+                'details.xp.value': 'TR.DefinedList.XP',
             };
             break;
 
