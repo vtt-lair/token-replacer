@@ -339,7 +339,7 @@ const TokenReplacer = {
             tr_tokenDirectory = DirectoryPicker.parse(game.settings.get("token-replacer", "tokenDirectory"))
         }    
         tr_difficultyName = game.settings.get("token-replacer", "difficultyName");
-        if (game.version.substr(0, 2) == '10') {
+        if (game.version.substr(0, 2) == '10' || game.version.substr(0, 2) == '11') {
             tr_difficultyVariable = game.settings.get("token-replacer", "difficultyVariable");
 
             if (tr_difficultyVariable.startsWith('data.')) {
@@ -998,10 +998,10 @@ function createDefinedVariableList() {
         case 'dnd5e':
         case 'sw5e':
             tr_definedVariableList = {
-                'data.details.cr': 'TR.DefinedList.CR',
-                'data.details.type.value': 'TR.DefinedList.Type',
-                'data.details.alignment': 'TR.DefinedList.Alignment',
-                'data.details.xp.value': 'TR.DefinedList.XP',
+                'details.cr': 'TR.DefinedList.CR',
+                'details.type.value': 'TR.DefinedList.Type',
+                'details.alignment': 'TR.DefinedList.Alignment',
+                'details.xp.value': 'TR.DefinedList.XP',
             };
             break;
 
