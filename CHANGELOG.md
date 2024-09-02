@@ -1,3 +1,7 @@
+# 0.8.0
+
+* Update to be version 12 compatible
+
 # 0.7.1
 
 * Fix issues with encoded url's
