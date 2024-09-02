@@ -34,7 +34,7 @@
           "type": "module",
           "manifest": "https://github.com/MrPrimate/tokenizer/releases/download/latest/module.json",
           "compatibility": {
-            "verified": "4.2.6"
+            "verified": "4.3.14"
           }
         }]
     },
@@ -43,7 +43,7 @@
     "download": "https://github.com/vtt-lair/token-replacer/releases/download/v0.7.0/token-replacer-v0.7.0.zip",
     "changelog": "https://github.com/vtt-lair/token-replacer/blob/main/CHANGELOG.md",
     "compatibility": {
-        "minimum": "10",
-        "verified": "11"
+        "minimum": "12",
+        "verified": "12"
     }
 }
