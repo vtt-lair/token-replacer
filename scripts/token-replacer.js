@@ -29,7 +29,7 @@ let tr_usedTokenizer = false;
 // Token Replacer Setup Menu
 class TokenReplacerSetup extends FormApplication {
     static get defaultOptions() {
-        return mergeObject(
+        return foundry.utils.mergeObject(
             super.defaultOptions, 
             {
                 title : game.i18n.localize("TR.Settings.Title.Name"),
@@ -87,7 +87,7 @@ class TokenReplacerSetup extends FormApplication {
         }
 
         for (let [mapIterator, setting] of settings.filter(([mapIterator, setting]) => mapIterator.includes('token-replacer'))){
-            const s = duplicate(setting);
+            const s = foundry.utils.duplicate(setting);
             s.name = game.i18n.localize(s.name);
             s.hint = game.i18n.localize(s.hint);
             s.value = game.settings.get(s[moduleField], s.key);
